@@ -6,4 +6,4 @@ He just gives up
 
 def play(world, game, id):
     # lazy game
-    return None
+    return None, None

@@ -24,4 +24,4 @@ def play(world, game, id):
                     for col in range(0, 3):
                         if world[grand_row, grand_col][row, col] == None:
                             return (grand_row, grand_col), (row, col)
-    return None
+    return None, None
