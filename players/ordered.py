@@ -9,8 +9,8 @@ def play(world, game, id, move_num):
     # lazy game
     if game is not None:
         # should play this game
-        for row in range(0,3):
-            for col in range(0,3):
+        for row in range(0, 3):
+            for col in range(0, 3):
                 if world[game][row, col] == None:
                     return game, (row, col)
     else:
