@@ -23,3 +23,20 @@ Debes crear un módulo en python con una función `play(world, game, id, move_nu
 * `move_num` el número de jugada, comenzando con 1.
 
 El valor de retorno de la función debe ser una 2-tupla de 2-tuplas que represente la jugada que va a jugar o `None, None` en caso de rendición, ejemplo: `(0, 0), (1, 1)`
+
+# Cómo usar el referi
+
+Habiendo instalado pygame (ver [Cómo instalar pygame](https://www.youtube.com/watch?v=ZJ2XvYMr6tY)) usar al referi es muy sencillo. Abre una consola y navega hasta el repositorio, luego:
+
+```bash
+$ python referi --help # Un poco de ayuda
+$ python referi lucky ordered -f 3 # Corre el referi, lucky contra depressed a 3 cuadros por segundo
+```
+
+El referi puede jugar con jugadores presentes en la carpeta `players`, se pueden repetir jugadores también, los nombres de los jugadores son el nombre del archivo sin la extensión, de modo que si tengo un jugador llamado `kysxd.py` en la carpeta players puedo jugarlo con:
+
+```bash
+$ python referi lucky kysxd
+```
+
+Por defecto los juegos son a 1 cuadro por segundo
