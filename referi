@@ -19,7 +19,39 @@ default_players = tuple(map(
     )
 ))
 
-def main(players):
+def is_owned(game):
+    # check rows
+    for row in range(3):
+        if game[row, 0] == None: continue
+        if game[row, 0] == game[row, 1]  == game[row, 2]:
+            return True
+    # check cols
+    for col in range(3):
+        if game[0, col] == None: continue
+        if game[0, col] == game[1, col]  == game[2, col]:
+            return True
+    # check diagonals
+    if game[0, 0] is not None and game[0, 0] == game[1, 1] == game[2, 2]:
+        return True
+    return game[0, 2] is not None and game[0, 2] == game[1, 1] == game[2, 0]
+
+def game_end(world):
+    # check rows
+    for row in range(3):
+        if world[row, 0]['owner'] == None: continue
+        if world[row, 0]['owner'] == world[row, 1]['owner']  == world[row, 2]['owner']:
+            return True
+    # check cols
+    for col in range(3):
+        if world[0, col]['owner'] == None: continue
+        if world[0, col]['owner'] == world[1, col]['owner']  == world[2, col]['owner']:
+            return True
+    # check diagonals
+    if world[0, 0]['owner'] is not None and world[0, 0]['owner'] == world[1, 1]['owner'] == world[2, 2]['owner']:
+        return True
+    return world[0, 2]['owner'] is not None and world[0, 2]['owner'] == world[1, 1]['owner'] == world[2, 0]['owner']
+
+def main(players, fps):
     pygame.init()
     screen = pygame.display.set_mode((395, 395))
     pygame.display.set_caption('Supercat referi')
@@ -28,6 +60,10 @@ def main(players):
     icons = {
         "X": pygame.image.load('src/square.png'),
         "O": pygame.image.load('src/circle.png'),
+    }
+    big_icons = {
+        "X": pygame.image.load('src/square_big.png'),
+        "O": pygame.image.load('src/circle_big.png'),
     }
 
     print ('Begining the game...')
@@ -50,6 +86,7 @@ def main(players):
     turn = False
     move = 1
     game_should_play = None
+    playing = True
 
     while True:
         for event in pygame.event.get():
@@ -59,6 +96,7 @@ def main(players):
             elif event.type == QUIT:
                 # Handles window close button
                 return
+        if not playing: continue
         # Make the player play
         game, pos = players[turn].play(
             world.copy(),
@@ -70,21 +108,31 @@ def main(players):
         # Handle surrenders
         if game is None:
             print ("%s surrenders!"%assigns[pieces[turn]])
-            break
+            playing = False
+            continue
 
         # Player made an invalid move
         if game_should_play is not None and game_should_play != game:
             print ("%s did not play the game he should!"%assigns[pieces[turn]])
-            break
+            playing = False
+            continue
 
         # Not available boxes
         if world[game][pos] in pieces:
             print ("%a attempted to play an already played box!"%assigns[pieces[turn]])
-            break
+            playing = False
+            continue
 
         # Set the world to the new status
         world[game][pos] = pieces[turn]
-        game_should_play = pos
+        if is_owned(world[game]):
+            world[game]['owner'] = pieces[turn]
+
+        if game_end(world):
+            print ("%s wins!"%assigns[pieces[turn]])
+            playing = False
+
+        game_should_play = pos if world[pos]['owner'] is None else None
 
         # Paint the board
         screen.fill((255, 255, 255))
@@ -95,6 +143,8 @@ def main(players):
             for g_col in range(3):
                 if world[g_row, g_col]['owner'] in pieces:
                     # draw a big one
+                    coordinates = g_row*(105+30) + 10, g_col*(105 + 30) + 10
+                    screen.blit(big_icons[world[g_row, g_col]['owner']], coordinates)
                     continue
 
                 for row in range(3):
@@ -110,7 +160,7 @@ def main(players):
         move += 1
 
         # tick to 1 fps
-        clock.tick(1)
+        clock.tick(fps)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -132,6 +182,13 @@ if __name__ == '__main__':
         type=str,
         help='second player'
     )
+    parser.add_argument(
+        '-f', '--fps',
+        metavar='fps',
+        type=int,
+        help='fps at with the game should play',
+        default=1,
+    )
 
     args = parser.parse_args()
 
@@ -149,4 +206,4 @@ if __name__ == '__main__':
         except ValueError:
             print ("Error importing player%d"%p)
 
-    main(players)
+    main(players, args.fps)
