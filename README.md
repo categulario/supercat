@@ -1,4 +1,7 @@
 # supercat
+
+![Juego de gato](https://github.com/developingo/supercat/blob/master/src/game.png)
+
 El juego de gato, a otro nivel
 
 ## Reglas
