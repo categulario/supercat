@@ -10,7 +10,7 @@ def shuffle(iterable):
     random.shuffle(l)
     return l
 
-def play(world, game, id):
+def play(world, game, id, move_num):
     # lazy game
     if game is not None:
         # should play this game

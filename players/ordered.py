@@ -5,7 +5,7 @@ The ordered player, plays the first available move from top to bottom, from left
 to right
 """
 
-def play(world, game, id):
+def play(world, game, id, move_num):
     # lazy game
     if game is not None:
         # should play this game
