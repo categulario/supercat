@@ -117,6 +117,11 @@ def main(players, fps):
             playing = False
             continue
 
+        if world[game]['owner'] in pieces:
+            print ("%s attempted to play in a closed game!"%assigns[pieces[turn]])
+            playing = False
+            continue
+
         # Not available boxes
         if world[game][pos] in pieces:
             print ("%a attempted to play an already played box!"%assigns[pieces[turn]])
@@ -205,5 +210,9 @@ if __name__ == '__main__':
                 print ('Wrong player: player%d'%p)
         except ValueError:
             print ("Error importing player%d"%p)
+
+    if None in players:
+        print ('Missing players!')
+        exit(1)
 
     main(players, args.fps)
