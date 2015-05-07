@@ -128,6 +128,8 @@ def main(players, fps):
             playing = False
             continue
 
+        print (move, assigns[pieces[turn]], game, pos)
+
         # Set the world to the new status
         world[game][pos] = pieces[turn]
         if is_owned(world[game]):
