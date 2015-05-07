@@ -66,7 +66,10 @@ def main(players):
             pieces[turn],
             move,
         )
-        print (game, pos)
+
+        # Player made an invalid move
+        if game_should_play is not None and game_should_play != game:
+            print ("%s did not play the game he should!"%assigns[pieces[turn]])
 
         # Handle surrenders
         if game is None:
