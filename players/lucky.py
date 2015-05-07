@@ -6,9 +6,9 @@ like the ordered one, but randomizes its search
 import random
 
 def shuffle(iterable):
-    l = list(iterable)[:]
-    random.shuffle(l)
-    return l
+    items = list(iterable)[:]
+    random.shuffle(items)
+    return items
 
 def play(world, game, id, move_num):
     # lazy game
