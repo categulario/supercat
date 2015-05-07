@@ -6,8 +6,10 @@ import argparse
 import os
 import importlib
 import pygame
+import random
 from pygame.locals import *
 from importlib.util import spec_from_file_location
+from definitions.world import world
 
 default_players = tuple(map(
     lambda x:x.split('.')[0],
@@ -19,9 +21,35 @@ default_players = tuple(map(
 
 def main(players):
     pygame.init()
-    screen = pygame.display.set_mode((400, 400))
+    screen = pygame.display.set_mode((395, 395))
     pygame.display.set_caption('Supercat referi')
     clock = pygame.time.Clock()
+    board = pygame.image.load('src/board.png')
+    icons = {
+        "X": pygame.image.load('src/square.png'),
+        "O": pygame.image.load('src/circle.png'),
+    }
+
+    print ('Begining the game...')
+    print ('Flipping the coin...')
+
+    assigns = {
+        "X": "player1",
+        "O": "player2",
+    }
+
+    if random.choice([0, 1]) == 1:
+        print ('Squares given to player 2')
+        players.reverse()
+        assigns["X"] = "player2",
+        assigns["O"] = "player1",
+    else:
+        print ('Squares given to player 1')
+
+    pieces = ("X", "O")
+    turn = False
+    move = 1
+    game_should_play = None
 
     while True:
         for event in pygame.event.get():
@@ -31,9 +59,46 @@ def main(players):
             elif event.type == QUIT:
                 # Handles window close button
                 return
+        # Make the player play
+        game, pos = players[turn].play(
+            world.copy(),
+            game_should_play,
+            pieces[turn],
+            move,
+        )
+        print (game, pos)
 
+        # Handle surrenders
+        if game is None:
+            print ("%s surrenders!"%assigns[pieces[turn]])
+            break
+
+        # Set the world to the new status
+        world[game][pos] = pieces[turn]
+        game_should_play = pos
+
+        # Paint the board
         screen.fill((255, 255, 255))
+        screen.blit(board, (0, 0))
+
+        # Paint the game status
+        for g_row in range(3):
+            for g_col in range(3):
+                if world[g_row, g_col]['owner'] in ['X', 'O']:
+                    # draw a big one
+                    continue
+
+                for row in range(3):
+                    for col in range(3):
+                        if world[g_row, g_col][row, col] in ['X', 'O']:
+                            # draw a small one
+                            coordinates = g_row*(105+30) + row*(25 + 15) + 10, g_col*(105 + 30) + col*(25 + 15) + 10
+                            screen.blit(icons[world[g_row, g_col][row, col]], coordinates)
+
         pygame.display.flip()
+
+        turn = not turn
+        move += 1
 
         # tick to 1 fps
         clock.tick(1)
