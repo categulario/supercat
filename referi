@@ -67,13 +67,19 @@ def main(players):
             move,
         )
 
-        # Player made an invalid move
-        if game_should_play is not None and game_should_play != game:
-            print ("%s did not play the game he should!"%assigns[pieces[turn]])
-
         # Handle surrenders
         if game is None:
             print ("%s surrenders!"%assigns[pieces[turn]])
+            break
+
+        # Player made an invalid move
+        if game_should_play is not None and game_should_play != game:
+            print ("%s did not play the game he should!"%assigns[pieces[turn]])
+            break
+
+        # Not available boxes
+        if world[game][pos] in pieces:
+            print ("%a attempted to play an already played box!"%assigns[pieces[turn]])
             break
 
         # Set the world to the new status
@@ -87,13 +93,13 @@ def main(players):
         # Paint the game status
         for g_row in range(3):
             for g_col in range(3):
-                if world[g_row, g_col]['owner'] in ['X', 'O']:
+                if world[g_row, g_col]['owner'] in pieces:
                     # draw a big one
                     continue
 
                 for row in range(3):
                     for col in range(3):
-                        if world[g_row, g_col][row, col] in ['X', 'O']:
+                        if world[g_row, g_col][row, col] in pieces:
                             # draw a small one
                             coordinates = g_row*(105+30) + row*(25 + 15) + 10, g_col*(105 + 30) + col*(25 + 15) + 10
                             screen.blit(icons[world[g_row, g_col][row, col]], coordinates)
