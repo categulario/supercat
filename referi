@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+"""
+The referi module
+"""
+import argparse
+import os
+import importlib
+import pygame
+from pygame.locals import *
+from importlib.util import spec_from_file_location
+
+default_players = tuple(map(
+    lambda x:x.split('.')[0],
+    filter(
+        lambda x:x.endswith('.py'),
+        os.listdir('players')
+    )
+))
+
+def main(players):
+    pygame.init()
+    screen = pygame.display.set_mode((400, 400))
+    pygame.display.set_caption('Supercat referi')
+    clock = pygame.time.Clock()
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN and event.key == 27:
+                # ESC key, exit game
+                return
+            elif event.type == QUIT:
+                # Handles window close button
+                return
+
+        screen.fill((255, 255, 255))
+        pygame.display.flip()
+
+        # tick to 1 fps
+        clock.tick(1)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(
+        prog="referi",
+        description='Supercat referi',
+        epilog="""
+        lets play!
+        """
+    )
+    parser.add_argument(
+        'player1',
+        metavar='player1',
+        type=str,
+        help='first player'
+    )
+    parser.add_argument(
+        'player2',
+        metavar='player2',
+        type=str,
+        help='second player'
+    )
+
+    args = parser.parse_args()
+
+    players = [None, None]
+
+    for p in range(2):
+        p_spec = getattr(args, 'player%d'%(p+1))
+        try:
+            if p_spec in default_players:
+                players[p] = importlib.import_module('players.' + p_spec)
+            elif os.path.isfile(p_spec):
+                players[p] = importlib.import_module(p_spec.split('.')[0])
+            else:
+                print ('Wrong player: player%d'%p)
+        except ValueError:
+            print ("Error importing player%d"%p)
+
+    main(players)
