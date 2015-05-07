@@ -134,6 +134,7 @@ def main(players, fps):
         world[game][pos] = pieces[turn]
         if is_owned(world[game]):
             world[game]['owner'] = pieces[turn]
+            print ("%s owned game %s"%(assigns[pieces[turn]], game))
 
         if game_end(world):
             print ("%s wins!"%assigns[pieces[turn]])
