@@ -10,6 +10,7 @@ import random
 from pygame.locals import *
 from importlib.util import spec_from_file_location
 from definitions.world import world
+from datetime import datetime
 
 default_players = tuple(map(
     lambda x:x.split('.')[0],
@@ -98,7 +99,7 @@ def won_game(world):
         return True
     return world[0, 2]['owner'] is not None and world[0, 2]['owner'] == world[1, 1]['owner'] == world[2, 0]['owner']
 
-def main(players, fps, coin):
+def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False):
     pygame.init()
     screen = pygame.display.set_mode((395, 395))
     pygame.display.set_caption('Supercat referi')
@@ -220,6 +221,10 @@ def main(players, fps, coin):
 
         pygame.display.flip()
 
+        if not playing and capture_screen:
+            pygame.image.save(screen, "screenshot_%s.png"%datetime.now().strftime('%Y-%m-%dT%H-%M-%S'))
+            break
+
         turn = not turn
         move += 1
 
@@ -259,6 +264,12 @@ if __name__ == '__main__':
         help='should the referi flip a coin?',
         default=False,
     )
+    parser.add_argument(
+        '-s', '--capture-screen',
+        action='store_true',
+        help='take a screenshot of the final game',
+        default=False,
+    )
 
     args = parser.parse_args()
 
@@ -280,4 +291,4 @@ if __name__ == '__main__':
         print ('Missing players!')
         exit(1)
 
-    main(players, args.fps, args.coin)
+    main(**vars(args))
