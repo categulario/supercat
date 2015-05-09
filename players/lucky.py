@@ -22,7 +22,7 @@ def play(world, game, id, move_num):
         # free play!
         for grand_row in shuffle(range(0, 3)):
             for grand_col in shuffle(range(0, 3)):
-                if world[grand_row, grand_col]['owner'] in ["X", "O"]:
+                if world[grand_row, grand_col]['owner'] is not None:
                     continue
 
                 for row in shuffle(range(0, 3)):

@@ -19,6 +19,9 @@ default_players = tuple(map(
     )
 ))
 
+def boxes():
+    return ((row, col) for row in range(3) for col in range(3))
+
 def is_owned(game):
     # check rows
     for row in range(3):
@@ -35,7 +38,51 @@ def is_owned(game):
         return True
     return game[0, 2] is not None and game[0, 2] == game[1, 1] == game[2, 0]
 
-def game_end(world):
+def is_dead_heat(game):
+    # check if there are empty boxes
+    filled_boxes = 0
+    for row, col in boxes():
+        filled_boxes += game[row,col] is not None
+    if filled_boxes < 9:
+        return False
+
+    # check rows
+    for row in range(3):
+        if game[row, 0] == game[row, 1]  == game[row, 2]:
+            return False
+    # check cols
+    for col in range(3):
+        if game[0, col] == game[1, col]  == game[2, col]:
+            return False
+    # check diagonals
+    if game[0, 0] == game[1, 1] == game[2, 2]:
+        return False
+    return not (game[0, 2] == game[1, 1] == game[2, 0])
+
+def is_dead_world(world):
+    # check if there are empty boxes
+    filled_boxes = 0
+    for row, col in boxes():
+        filled_boxes += world[row,col]['owner'] is not None
+    if filled_boxes < 9:
+        return False
+
+    # check rows
+    for row in range(3):
+        if world[row, 0]['owner'] != 'R' and \
+           world[row, 0] == world[row, 1]  == world[row, 2]:
+            return False
+    # check cols
+    for col in range(3):
+        if world[0, col] != 'R' and \
+           world[0, col] == world[1, col]  == world[2, col]:
+            return False
+    # check diagonals
+    if world[0, 0] != 'R' and world[0, 0] == world[1, 1] == world[2, 2]:
+        return False
+    return world[0, 2] != 'R' and not (world[0, 2] == world[1, 1] == world[2, 0])
+
+def won_game(world):
     # check rows
     for row in range(3):
         if world[row, 0]['owner'] == None: continue
@@ -64,6 +111,7 @@ def main(players, fps):
     big_icons = {
         "X": pygame.image.load('src/square_big.png'),
         "O": pygame.image.load('src/circle_big.png'),
+        "R": pygame.image.load('src/octo_big.png'),
     }
 
     print ('Begining the game...')
@@ -82,7 +130,7 @@ def main(players, fps):
     else:
         print ('Squares given to player 1')
 
-    pieces = ("X", "O")
+    pieces = ("X", "O", "R")
     turn = False
     move = 1
     game_should_play = None
@@ -132,12 +180,21 @@ def main(players, fps):
 
         # Set the world to the new status
         world[game][pos] = pieces[turn]
+
         if is_owned(world[game]):
             world[game]['owner'] = pieces[turn]
             print ("%s owned game %s"%(assigns[pieces[turn]], game))
 
-        if game_end(world):
+        if is_dead_heat(world[game]):
+            world[game]['owner'] = 'R'
+            print ("%s killed the heat %s"%(assigns[pieces[turn]], game))
+
+        if won_game(world):
             print ("%s wins!"%assigns[pieces[turn]])
+            playing = False
+
+        if is_dead_world(world):
+            print ("Game finished without a winner")
             playing = False
 
         game_should_play = pos if world[pos]['owner'] is None else None
