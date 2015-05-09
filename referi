@@ -98,7 +98,7 @@ def won_game(world):
         return True
     return world[0, 2]['owner'] is not None and world[0, 2]['owner'] == world[1, 1]['owner'] == world[2, 0]['owner']
 
-def main(players, fps):
+def main(players, fps, coin):
     pygame.init()
     screen = pygame.display.set_mode((395, 395))
     pygame.display.set_caption('Supercat referi')
@@ -115,22 +115,21 @@ def main(players, fps):
     }
 
     print ('Begining the game...')
-    print ('Flipping the coin...')
 
     assigns = {
         "X": "player1",
         "O": "player2",
     }
+    pieces = ["X", "O", "R"]
 
-    if random.choice([0, 1]) == 1:
-        print ('Squares given to player 2')
+    if coin and random.choice([0, 1]) == 1:
+        print ('Flipping the coin...')
+        print ('player2 starts game')
         players.reverse()
-        assigns["X"] = "player2",
-        assigns["O"] = "player1",
+        pieces[0], pieces[1] = pieces[1], pieces[0]
     else:
-        print ('Squares given to player 1')
+        print ('player1 starts game')
 
-    pieces = ("X", "O", "R")
     turn = False
     move = 1
     game_should_play = None
@@ -237,22 +236,28 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         'player1',
-        metavar='player1',
+        metavar='PLAYER',
         type=str,
         help='first player'
     )
     parser.add_argument(
         'player2',
-        metavar='player2',
+        metavar='PLAYER',
         type=str,
         help='second player'
     )
     parser.add_argument(
         '-f', '--fps',
-        metavar='fps',
+        metavar='NUM',
         type=int,
         help='fps at with the game should play',
         default=1,
+    )
+    parser.add_argument(
+        '-c', '--coin',
+        action='store_true',
+        help='should the referi flip a coin?',
+        default=False,
     )
 
     args = parser.parse_args()
@@ -275,4 +280,4 @@ if __name__ == '__main__':
         print ('Missing players!')
         exit(1)
 
-    main(players, args.fps)
+    main(players, args.fps, args.coin)
