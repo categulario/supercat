@@ -193,7 +193,7 @@ def main(players, fps):
             print ("%s wins!"%assigns[pieces[turn]])
             playing = False
 
-        if is_dead_world(world):
+        elif is_dead_world(world):
             print ("Game finished without a winner")
             playing = False
 
