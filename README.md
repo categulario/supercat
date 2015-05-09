@@ -24,7 +24,7 @@ Debes crear un módulo en python con una función `play(world, game, id, move_nu
 
 El valor de retorno de la función debe ser una 2-tupla de 2-tuplas que represente la jugada que va a jugar o `None, None` en caso de rendición, ejemplo: `(0, 0), (1, 1)`
 
-# Cómo usar el referi
+## Cómo usar el referi
 
 Habiendo instalado pygame (ver [Cómo instalar pygame](https://www.youtube.com/watch?v=ZJ2XvYMr6tY)) usar al referi es muy sencillo. Abre una consola y navega hasta el repositorio, luego:
 
@@ -40,3 +40,18 @@ $ python referi lucky kysxd
 ```
 
 Por defecto los juegos son a 1 cuadro por segundo
+
+## Changelog
+
+### v0.2
+
+* Se pueden guardar capturas de pantalla del final del juego usando la opción `-s` de la interfaz de línea de comandos
+* El primer jugador siempre juega cuadros
+* Para que el referi tire una moneda y decida quién tira primero se usa la opción `-c` (aun así el primer jugador juega cuadros)
+* Ya se reconocen los empates (locales y general) y se marcan en el mundo con `"R"`
+* El código de `lucky` y `ordered` está más limpio gracias a una función mágica
+
+### v0.1
+
+* Primera versión del referi, puede poner a competir dos IA y mostrar la partida
+* permite regular los frames por segundo
