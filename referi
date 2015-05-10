@@ -21,6 +21,20 @@ default_players = tuple(map(
     )
 ))
 
+class PlayerAction(argparse.Action):
+    """Return a module"""
+    def __init__(self, option_strings, dest, nargs=None, **kwargs):
+        if nargs is not None:
+            raise ValueError("nargs not allowed")
+        super(PlayerAction, self).__init__(option_strings, dest, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        player = importlib.import_module('players.' + values)
+
+        setattr(namespace, self.dest, player)
+
+
+
 def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False):
     pygame.init()
     screen = pygame.display.set_mode((395, 395))
@@ -44,6 +58,7 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False):
         "O": "player2",
     }
     pieces = ["X", "O", "R"]
+    players = [player1, player2]
 
     if coin and random.choice([0, 1]) == 1:
         print ('Flipping the coin...')
@@ -165,13 +180,17 @@ if __name__ == '__main__':
         'player1',
         metavar='PLAYER',
         type=str,
-        help='first player'
+        help='first player',
+        action=PlayerAction,
+        choices=default_players,
     )
     parser.add_argument(
         'player2',
         metavar='PLAYER',
         type=str,
-        help='second player'
+        help='second player',
+        action=PlayerAction,
+        choices=default_players,
     )
     parser.add_argument(
         '-f', '--fps',
@@ -194,23 +213,5 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
-
-    players = [None, None]
-
-    for p in range(2):
-        p_spec = getattr(args, 'player%d'%(p+1))
-        try:
-            if p_spec in default_players:
-                players[p] = importlib.import_module('players.' + p_spec)
-            elif os.path.isfile(p_spec):
-                players[p] = importlib.import_module(p_spec.split('.')[0])
-            else:
-                print ('Wrong player: player%d'%p)
-        except ValueError:
-            print ("Error importing player%d"%p)
-
-    if None in players:
-        print ('Missing players!')
-        exit(1)
 
     main(**vars(args))
