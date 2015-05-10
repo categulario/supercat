@@ -18,7 +18,7 @@ def play(world, game, id, move_num):
     else:
         # free play!
         for grand_row, grand_col in boxes():
-            if world[grand_row, grand_col]['owner'] in not None:
+            if world[grand_row, grand_col]['owner'] is not None:
                 continue
 
             for row, col in boxes():
