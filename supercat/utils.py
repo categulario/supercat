@@ -1,10 +1,18 @@
 """
 Utility module, functions for working with the world
 """
-
+import random
 
 def boxes():
     return ((row, col) for row in range(3) for col in range(3))
+
+def shuffle(iterable):
+    items = list(iterable)[:]
+    random.shuffle(items)
+    return items
+
+def random_boxes():
+    return shuffle((row, col) for row in range(3) for col in range(3))
 
 def is_owned(game):
     # check rows

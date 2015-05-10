@@ -5,8 +5,7 @@ The ordered player, plays the first available move from top to bottom, from left
 to right
 """
 
-def boxes():
-    return ((row, col) for row in range(3) for col in range(3))
+from supercat.utils import boxes
 
 def play(world, game, id, move_num):
     # lazy game

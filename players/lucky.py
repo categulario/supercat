@@ -4,17 +4,7 @@
 like the ordered one, but randomizes its search
 """
 import random
-
-def shuffle(iterable):
-    items = list(iterable)[:]
-    random.shuffle(items)
-    return items
-
-def boxes():
-    return ((row, col) for row in range(3) for col in range(3))
-
-def random_boxes():
-    return shuffle((row, col) for row in range(3) for col in range(3))
+from supercat.utils import random_boxes
 
 def play(world, game, id, move_num):
     # lazy game
