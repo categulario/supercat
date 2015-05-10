@@ -43,6 +43,11 @@ Por defecto los juegos son a 1 cuadro por segundo
 
 ## Changelog
 
+### v0.3
+
+* Se añade el módulo `supercat.utils` que todos los jugadores pueden usar, con funciones útiles como `boxes`, `random_boxes` y tests sobre el estado del juego
+* Correcciones a `ordered`
+
 ### v0.2
 
 * Se pueden guardar capturas de pantalla del final del juego usando la opción `-s` de la interfaz de línea de comandos
