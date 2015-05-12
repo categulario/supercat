@@ -8,7 +8,7 @@ import importlib
 import random
 from supercat.utils import *
 from importlib.util import spec_from_file_location
-from definitions.world import world
+from definitions.world import clean_world
 from datetime import datetime
 try:
     import pygame
@@ -66,6 +66,7 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
     }
     pieces = ["X", "O", "R"]
     players = [player1, player2]
+    world = clean_world()
 
     if coin and random.choice([0, 1]) == 1:
         print ('Flipping the coin...')
