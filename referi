@@ -5,13 +5,18 @@ The referi module
 import argparse
 import os
 import importlib
-import pygame
 import random
-from pygame.locals import *
 from supercat.utils import *
 from importlib.util import spec_from_file_location
 from definitions.world import world
 from datetime import datetime
+try:
+    import pygame
+    from pygame.locals import *
+    PYGAME_MODULE = True
+except ImportError:
+    print ('pygame module not available')
+    PYGAME_MODULE = False
 
 default_players = tuple(map(
     lambda x:x.split('.')[0],
@@ -35,21 +40,23 @@ class PlayerAction(argparse.Action):
 
 
 
-def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False):
-    pygame.init()
-    screen = pygame.display.set_mode((395, 395))
-    pygame.display.set_caption('Supercat referi')
-    clock = pygame.time.Clock()
-    board = pygame.image.load('src/board.png')
-    icons = {
-        "X": pygame.image.load('src/square.png'),
-        "O": pygame.image.load('src/circle.png'),
-    }
-    big_icons = {
-        "X": pygame.image.load('src/square_big.png'),
-        "O": pygame.image.load('src/circle_big.png'),
-        "R": pygame.image.load('src/octo_big.png'),
-    }
+def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no_render=False):
+    render = not no_render
+    if PYGAME_MODULE and render:
+        pygame.init()
+        screen = pygame.display.set_mode((395, 395))
+        pygame.display.set_caption('Supercat referi')
+        clock = pygame.time.Clock()
+        board = pygame.image.load('src/board.png')
+        icons = {
+            "X": pygame.image.load('src/square.png'),
+            "O": pygame.image.load('src/circle.png'),
+        }
+        big_icons = {
+            "X": pygame.image.load('src/square_big.png'),
+            "O": pygame.image.load('src/circle_big.png'),
+            "R": pygame.image.load('src/octo_big.png'),
+        }
 
     print ('Begining the game...')
 
@@ -71,17 +78,16 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False):
     turn = False
     move = 1
     game_should_play = None
-    playing = True
 
     while True:
-        for event in pygame.event.get():
-            if event.type == KEYDOWN and event.key == 27:
-                # ESC key, exit game
-                return
-            elif event.type == QUIT:
-                # Handles window close button
-                return
-        if not playing: continue
+        if PYGAME_MODULE and render:
+            for event in pygame.event.get():
+                if event.type == KEYDOWN and event.key == 27:
+                    # ESC key, exit game
+                    return
+                elif event.type == QUIT:
+                    # Handles window close button
+                    return
         # Make the player play
         game, pos = players[turn].play(
             world.copy(),
@@ -93,25 +99,21 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False):
         # Handle surrenders
         if game is None:
             print ("%s surrenders!"%assigns[pieces[turn]])
-            playing = False
-            continue
+            break
 
         # Player made an invalid move
         if game_should_play is not None and game_should_play != game:
             print ("%s did not play the game he should!"%assigns[pieces[turn]])
-            playing = False
-            continue
+            break
 
         if world[game]['owner'] in pieces:
             print ("%s attempted to play in a closed game!"%assigns[pieces[turn]])
-            playing = False
-            continue
+            break
 
         # Not available boxes
         if world[game][pos] in pieces:
             print ("%a attempted to play an already played box!"%assigns[pieces[turn]])
-            playing = False
-            continue
+            break
 
         print (move, assigns[pieces[turn]], game, pos)
 
@@ -128,45 +130,46 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False):
 
         if won_game(world):
             print ("%s wins!"%assigns[pieces[turn]])
-            playing = False
+            break
 
         elif is_dead_world(world):
             print ("Game finished without a winner")
-            playing = False
+            break
 
         game_should_play = pos if world[pos]['owner'] is None else None
 
-        # Paint the board
-        screen.fill((255, 255, 255))
-        screen.blit(board, (0, 0))
+        if PYGAME_MODULE and render:
+            # Paint the board
+            screen.fill((255, 255, 255))
+            screen.blit(board, (0, 0))
 
-        # Paint the game status
-        for g_row in range(3):
-            for g_col in range(3):
-                if world[g_row, g_col]['owner'] in pieces:
-                    # draw a big one
-                    coordinates = g_row*(105+30) + 10, g_col*(105 + 30) + 10
-                    screen.blit(big_icons[world[g_row, g_col]['owner']], coordinates)
-                    continue
+            # Paint the game status
+            for g_row in range(3):
+                for g_col in range(3):
+                    if world[g_row, g_col]['owner'] in pieces:
+                        # draw a big one
+                        coordinates = g_row*(105+30) + 10, g_col*(105 + 30) + 10
+                        screen.blit(big_icons[world[g_row, g_col]['owner']], coordinates)
+                        continue
 
-                for row in range(3):
-                    for col in range(3):
-                        if world[g_row, g_col][row, col] in pieces:
-                            # draw a small one
-                            coordinates = g_row*(105+30) + row*(25 + 15) + 10, g_col*(105 + 30) + col*(25 + 15) + 10
-                            screen.blit(icons[world[g_row, g_col][row, col]], coordinates)
+                    for row in range(3):
+                        for col in range(3):
+                            if world[g_row, g_col][row, col] in pieces:
+                                # draw a small one
+                                coordinates = g_row*(105+30) + row*(25 + 15) + 10, g_col*(105 + 30) + col*(25 + 15) + 10
+                                screen.blit(icons[world[g_row, g_col][row, col]], coordinates)
 
-        pygame.display.flip()
-
-        if not playing and capture_screen:
-            pygame.image.save(screen, "screenshot_%s.png"%datetime.now().strftime('%Y-%m-%dT%H-%M-%S'))
-            break
+            pygame.display.flip()
 
         turn = not turn
         move += 1
 
-        # tick to 1 fps
-        clock.tick(fps)
+        if PYGAME_MODULE and render:
+            # tick to 1 fps
+            clock.tick(fps)
+
+    if capture_screen and PYGAME_MODULE and render:
+        pygame.image.save(screen, "screenshot_%s.png"%datetime.now().strftime('%Y-%m-%dT%H-%M-%S'))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -209,6 +212,12 @@ if __name__ == '__main__':
         '-s', '--capture-screen',
         action='store_true',
         help='take a screenshot of the final game',
+        default=False,
+    )
+    parser.add_argument(
+        '-n', '--no-render',
+        action='store_true',
+        help='',
         default=False,
     )
 
