@@ -12,7 +12,7 @@ El juego del supergato se juega así:
 * Cada jugador jugará el gato análogo en el gato grande a la casilla que jugó el jugador previo
 * Si a un jugador le corresponde jugar un gato que ya está terminado (ganado o empate) puede elegir qué gato jugar.
 
-## Cómo jugar con este referi
+## Cómo usar el referi
 
 Debes crear un módulo en python con una clase `Player` que herede de `supercat.utils.BasePlayer` y que tenga una función `play(world, game, move_num)`, dónde:
 
