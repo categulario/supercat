@@ -3,7 +3,12 @@
 
 He just gives up
 """
+from supercat.classes import BasePlayer
 
-def play(world, game, id, move_num):
-    # lazy game
-    return None, None
+class Player:
+
+    name = 'depressed'
+
+    def play(self, world, game, move_num):
+        # lazy game
+        return None, None
