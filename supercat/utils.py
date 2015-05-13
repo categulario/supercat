@@ -14,6 +14,20 @@ def shuffle(iterable):
 def random_boxes():
     return shuffle((row, col) for row in range(3) for col in range(3))
 
+def clean_world():
+    world = {
+        (row, col): {
+            (srow, scol): None
+            for srow, scol in boxes()
+        }
+        for row, col in boxes()
+    }
+
+    for game in boxes():
+        world[game]['owner'] = None
+
+    return world
+
 def is_owned(game):
     # check rows
     for row in range(3):
