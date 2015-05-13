@@ -39,7 +39,7 @@ class PlayerAction(argparse.Action):
 
 
 
-def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no_render=False, bulk=1):
+def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no_render=False):
     render = not no_render
     if PYGAME_MODULE and render:
         pygame.init()
@@ -226,13 +226,6 @@ if __name__ == '__main__':
         action='store_true',
         help='Do not render the pygame GUI, just compute the game',
         default=False,
-    )
-    parser.add_argument(
-        '-b', '--bulk',
-        metavar='TIMES',
-        type=int,
-        help='Run TIMES games in bulk',
-        default=1,
     )
 
     args = parser.parse_args()
