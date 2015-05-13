@@ -3,6 +3,7 @@ core functions
 """
 import random
 import time
+import os
 from supercat.utils import *
 from datetime import datetime
 
@@ -13,6 +14,14 @@ try:
 except ImportError:
     print ('pygame module not available')
     PYGAME_MODULE = False
+
+default_players = tuple(map(
+    lambda x:x.split('.')[0],
+    filter(
+        lambda x:x.endswith('.py'),
+        os.listdir('players')
+    )
+))
 
 def main(
         player1=None,

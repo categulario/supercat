@@ -3,17 +3,8 @@
 The referi module
 """
 import argparse
-import os
-from supercat.core import main
+from supercat.core import main, default_players
 from supercat.classes import PlayerAction
-
-default_players = tuple(map(
-    lambda x:x.split('.')[0],
-    filter(
-        lambda x:x.endswith('.py'),
-        os.listdir('players')
-    )
-))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
