@@ -4,10 +4,10 @@ The referi module
 """
 import argparse
 import os
-import importlib
 import random
+import time
 from supercat.utils import *
-from importlib.util import spec_from_file_location
+from supercat.classes import PlayerAction
 from datetime import datetime
 try:
     import pygame
@@ -25,21 +25,14 @@ default_players = tuple(map(
     )
 ))
 
-class PlayerAction(argparse.Action):
-    """Return a module"""
-    def __init__(self, option_strings, dest, nargs=None, **kwargs):
-        if nargs is not None:
-            raise ValueError("nargs not allowed")
-        super(PlayerAction, self).__init__(option_strings, dest, **kwargs)
-
-    def __call__(self, parser, namespace, values, option_string=None):
-        player = importlib.import_module('players.' + values)
-
-        setattr(namespace, self.dest, player)
-
-
-
-def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no_render=False):
+def main(
+        player1=None,
+        player2=None,
+        fps=1,
+        coin=False,
+        capture_screen=False,
+        no_render=False,
+        wait=0):
     render = not no_render
     if PYGAME_MODULE and render:
         pygame.init()
@@ -57,18 +50,21 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
             "R": pygame.image.load('src/octo_big.png'),
         }
 
+    player1.identity = 'X'
+    player2.identity = 'O'
+
     print ('Begining the game...')
 
-    if player1.__name__ == player2.__name__:
-        name = player1.__name__.split('.')[-1]
+    if player1.name == player2.name:
+        name = player1.name
         assigns = {
             "X": name+'1',
             "O": name+'2',
         }
     else:
         assigns = {
-            "X": player1.__name__.split('.')[-1],
-            "O": player2.__name__.split('.')[-1],
+            "X": player1.name,
+            "O": player2.name,
         }
 
     pieces = ["X", "O", "R"]
@@ -88,6 +84,7 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
     print ('%s starts game'%assigns[pieces[turn]])
 
     while True:
+        player_name = assigns[pieces[turn]]
         if PYGAME_MODULE and render:
             for event in pygame.event.get():
                 if event.type == KEYDOWN and event.key == 27:
@@ -100,50 +97,40 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
         game, pos = players[turn].play(
             world.copy(),
             game_should_play,
-            pieces[turn],
             move,
         )
 
         # Handle surrenders
         if game is None:
-            print ("%s surrenders!"%assigns[pieces[turn]])
+            print ("%s surrenders!"%player_name)
             break
 
         # Player made an invalid move
         if game_should_play is not None and game_should_play != game:
-            print ("%s did not play the game he should!"%assigns[pieces[turn]])
+            print ("%s did not play the game he should!"%player_name)
             break
 
         if world[game]['owner'] in pieces:
-            print ("%s attempted to play in a closed game!"%assigns[pieces[turn]])
+            print ("%s attempted to play in a closed game!"%player_name)
             break
 
         # Not available boxes
         if world[game][pos] in pieces:
-            print ("%a attempted to play an already played box!"%assigns[pieces[turn]])
+            print ("%a attempted to play an already played box!"%player_name)
             break
 
-        print (move, assigns[pieces[turn]], game, pos)
+        print (move, player_name, game, pos)
 
         # Set the world to the new status
         world[game][pos] = pieces[turn]
 
         if is_owned(world[game]):
             world[game]['owner'] = pieces[turn]
-            print ("%s owned game %s"%(assigns[pieces[turn]], game))
+            print ("%s owned game %s"%(player_name, game))
 
         if is_dead_heat(world[game]):
             world[game]['owner'] = 'R'
-            print ("%s killed the heat %s"%(assigns[pieces[turn]], game))
-
-        if won_game(world):
-            print ("%s wins!"%assigns[pieces[turn]])
-            winner = assigns[pieces[turn]]
-            break
-
-        elif is_dead_world(world):
-            print ("Game finished without a winner")
-            break
+            print ("%s killed the heat %s"%(player_name, game))
 
         game_should_play = pos if world[pos]['owner'] is None else None
 
@@ -170,6 +157,15 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
 
             pygame.display.flip()
 
+        if won_game(world):
+            print ("%s wins!"%player_name)
+            winner = player_name
+            break
+
+        elif is_dead_world(world):
+            print ("Game finished without a winner")
+            break
+
         turn = not turn
         move += 1
 
@@ -179,6 +175,9 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
 
     if capture_screen and PYGAME_MODULE and render:
         pygame.image.save(screen, "screenshot_%s.png"%datetime.now().strftime('%Y-%m-%dT%H-%M-%S'))
+
+    if wait and PYGAME_MODULE and render:
+        time.sleep(wait)
 
     return winner
 
@@ -230,6 +229,13 @@ if __name__ == '__main__':
         action='store_true',
         help='Do not render the pygame GUI, just compute the game',
         default=False,
+    )
+    parser.add_argument(
+        '-w', '--wait',
+        metavar='SECONDS',
+        type=int,
+        help='wait before game disapears',
+        default=0,
     )
 
     args = parser.parse_args()

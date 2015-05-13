@@ -12,17 +12,22 @@ El juego del supergato se juega así:
 * Cada jugador jugará el gato análogo en el gato grande a la casilla que jugó el jugador previo
 * Si a un jugador le corresponde jugar un gato que ya está terminado (ganado o empate) puede elegir qué gato jugar.
 
-## Cómo jugar
+## Cómo jugar con este referi
 
-Debes crear un módulo en python con una función `play(world, game, id, move_num)`, dónde:
+Debes crear un módulo en python con una clase `Player` que herede de `supercat.utils.BasePlayer` y que tenga una función `play(world, game, move_num)`, dónde:
 
 * `world` es el estado actual del juego (ver `definitinos/world.py`)
 * `game` son las coordenadas (como tupla) del juego que el jugador debe jugar
   o `None` si es juego libre. Ejemplo: `(1, 2)`
-* `id` es uno de `"X"` ó `"O"`
 * `move_num` el número de jugada, comenzando con 1.
 
 El valor de retorno de la función debe ser una 2-tupla de 2-tuplas que represente la jugada que va a jugar o `None, None` en caso de rendición, ejemplo: `(0, 0), (1, 1)`
+
+Adicionalmente la clase debe definir un atributo `name` con el nombre del jugador.
+
+Se puede saber qué tipo de ficha (`X`, u `O`) se está jugando accediendo a la propiedad `self.identity` de la clase.
+
+También se puede saber qué juega el oponente llamando a la función `self.oponent()` de la clase.
 
 ## Cómo usar el referi
 
@@ -42,6 +47,11 @@ $ python referi lucky kysxd
 Por defecto los juegos son a 1 cuadro por segundo
 
 ## Changelog
+
+### v1.0
+
+* Ahora los jugadores son objetos en vez de sólo funciones, revisar `players/lucky.py` para más información
+* Correcciones menores de bugs
 
 ### v0.3
 
