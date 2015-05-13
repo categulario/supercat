@@ -19,6 +19,9 @@ class PlayerAction(argparse.Action):
 
 class BasePlayer:
     """Represents a player"""
+
+    name = 'base'
+
     def __init__(self, identity='X'):
         self.identity = identity
 
