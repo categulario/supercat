@@ -59,25 +59,32 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
 
     print ('Begining the game...')
 
-    assigns = {
-        "X": "player1",
-        "O": "player2",
-    }
+    if player1.__name__ == player2.__name__:
+        name = player1.__name__.split('.')[-1]
+        assigns = {
+            "X": name+'1',
+            "O": name+'2',
+        }
+    else:
+        assigns = {
+            "X": player1.__name__.split('.')[-1],
+            "O": player2.__name__.split('.')[-1],
+        }
+
     pieces = ["X", "O", "R"]
     players = [player1, player2]
     world = clean_world()
 
-    if coin and random.choice([0, 1]) == 1:
-        print ('Flipping the coin...')
-        print ('player2 starts game')
-        players.reverse()
-        pieces[0], pieces[1] = pieces[1], pieces[0]
-    else:
-        print ('player1 starts game')
-
     turn = False
     move = 1
     game_should_play = None
+
+    if coin and random.choice([0, 1]) == 1:
+        print ('Flipping the coin...')
+        players.reverse()
+        pieces[0], pieces[1] = pieces[1], pieces[0]
+
+    print ('%s starts game'%assigns[pieces[turn]])
 
     while True:
         if PYGAME_MODULE and render:
