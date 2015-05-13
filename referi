@@ -115,7 +115,7 @@ def main(
             err("%a attempted to play an already played box!"%player_name)
             break
 
-        csv(player_name, *(game+pos))
+        csv(player_name.rjust(10, ' '), *(game+pos))
 
         # Set the world to the new status
         world[game][pos] = pieces[turn]

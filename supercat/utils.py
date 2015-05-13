@@ -6,7 +6,7 @@ from functools import partial
 import sys
 
 err = partial(print, file=sys.stderr)
-csv = partial(print, sep=',')
+csv = partial(print, sep=', ')
 
 def boxes():
     return ((row, col) for row in range(3) for col in range(3))
