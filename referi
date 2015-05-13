@@ -9,6 +9,7 @@ import time
 from supercat.utils import *
 from supercat.classes import PlayerAction
 from datetime import datetime
+
 try:
     import pygame
     from pygame.locals import *
@@ -53,8 +54,6 @@ def main(
     player1.identity = 'X'
     player2.identity = 'O'
 
-    print ('Begining the game...')
-
     if player1.name == player2.name:
         name = player1.name
         assigns = {
@@ -77,11 +76,8 @@ def main(
     winner = 'R'
 
     if coin and random.choice([0, 1]) == 1:
-        print ('Flipping the coin...')
         players.reverse()
         pieces[0], pieces[1] = pieces[1], pieces[0]
-
-    print ('%s starts game'%assigns[pieces[turn]])
 
     while True:
         player_name = assigns[pieces[turn]]
@@ -102,35 +98,35 @@ def main(
 
         # Handle surrenders
         if game is None:
-            print ("%s surrenders!"%player_name)
+            err("%s surrenders!"%player_name)
             break
 
         # Player made an invalid move
         if game_should_play is not None and game_should_play != game:
-            print ("%s did not play the game he should!"%player_name)
+            err("%s did not play the game he should!"%player_name)
             break
 
         if world[game]['owner'] in pieces:
-            print ("%s attempted to play in a closed game!"%player_name)
+            err("%s attempted to play in a closed game!"%player_name)
             break
 
         # Not available boxes
         if world[game][pos] in pieces:
-            print ("%a attempted to play an already played box!"%player_name)
+            err("%a attempted to play an already played box!"%player_name)
             break
 
-        print (move, player_name, game, pos)
+        csv(player_name, *(game+pos))
 
         # Set the world to the new status
         world[game][pos] = pieces[turn]
 
         if is_owned(world[game]):
             world[game]['owner'] = pieces[turn]
-            print ("%s owned game %s"%(player_name, game))
+            err("%s owned game %s"%(player_name, game))
 
         if is_dead_heat(world[game]):
             world[game]['owner'] = 'R'
-            print ("%s killed the heat %s"%(player_name, game))
+            err("%s killed the heat %s"%(player_name, game))
 
         game_should_play = pos if world[pos]['owner'] is None else None
 
@@ -158,12 +154,12 @@ def main(
             pygame.display.flip()
 
         if won_game(world):
-            print ("%s wins!"%player_name)
+            err("%s wins!"%player_name)
             winner = player_name
             break
 
         elif is_dead_world(world):
-            print ("Game finished without a winner")
+            err("Game finished without a winner")
             break
 
         turn = not turn

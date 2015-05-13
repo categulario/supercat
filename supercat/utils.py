@@ -2,6 +2,11 @@
 Utility module, functions for working with the world
 """
 import random
+from functools import partial
+import sys
+
+err = partial(print, file=sys.stderr)
+csv = partial(print, sep=',')
 
 def boxes():
     return ((row, col) for row in range(3) for col in range(3))
