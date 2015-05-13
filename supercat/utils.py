@@ -91,15 +91,15 @@ def is_dead_world(world):
 def won_game(world):
     # check rows
     for row in range(3):
-        if world[row, 0]['owner'] == None: continue
+        if world[row, 0]['owner'] in [None, 'R']: continue
         if world[row, 0]['owner'] == world[row, 1]['owner']  == world[row, 2]['owner']:
             return True
     # check cols
     for col in range(3):
-        if world[0, col]['owner'] == None: continue
+        if world[0, col]['owner'] in [None, 'R']: continue
         if world[0, col]['owner'] == world[1, col]['owner']  == world[2, col]['owner']:
             return True
     # check diagonals
-    if world[0, 0]['owner'] is not None and world[0, 0]['owner'] == world[1, 1]['owner'] == world[2, 2]['owner']:
+    if world[0, 0]['owner'] not in [None, 'R'] and world[0, 0]['owner'] == world[1, 1]['owner'] == world[2, 2]['owner']:
         return True
-    return world[0, 2]['owner'] is not None and world[0, 2]['owner'] == world[1, 1]['owner'] == world[2, 0]['owner']
+    return world[0, 2]['owner'] not in [None, 'R'] and world[0, 2]['owner'] == world[1, 1]['owner'] == world[2, 0]['owner']
