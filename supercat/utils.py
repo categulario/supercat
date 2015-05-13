@@ -2,6 +2,11 @@
 Utility module, functions for working with the world
 """
 import random
+from functools import partial
+import sys
+
+err = partial(print, file=sys.stderr)
+csv = partial(print, sep=', ')
 
 def boxes():
     return ((row, col) for row in range(3) for col in range(3))
@@ -16,11 +21,11 @@ def random_boxes():
 
 def clean_world():
     world = {
-        (row, col): {
-            (srow, scol): None
-            for srow, scol in boxes()
+        game: {
+            box: None
+            for box in boxes()
         }
-        for row, col in boxes()
+        for game in boxes()
     }
 
     for game in boxes():
