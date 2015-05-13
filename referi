@@ -78,6 +78,7 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
     turn = False
     move = 1
     game_should_play = None
+    winner = 'R'
 
     if coin and random.choice([0, 1]) == 1:
         print ('Flipping the coin...')
@@ -137,6 +138,7 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
 
         if won_game(world):
             print ("%s wins!"%assigns[pieces[turn]])
+            winner = assigns[pieces[turn]]
             break
 
         elif is_dead_world(world):
@@ -177,6 +179,8 @@ def main(player1=None, player2=None, fps=1, coin=False, capture_screen=False, no
 
     if capture_screen and PYGAME_MODULE and render:
         pygame.image.save(screen, "screenshot_%s.png"%datetime.now().strftime('%Y-%m-%dT%H-%M-%S'))
+
+    return winner
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
