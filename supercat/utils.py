@@ -21,11 +21,11 @@ def random_boxes():
 
 def clean_world():
     world = {
-        (row, col): {
-            (srow, scol): None
-            for srow, scol in boxes()
+        game: {
+            box: None
+            for box in boxes()
         }
-        for row, col in boxes()
+        for game in boxes()
     }
 
     for game in boxes():
