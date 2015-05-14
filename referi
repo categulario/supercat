@@ -15,7 +15,7 @@ if __name__ == '__main__':
         """
     )
     parser.add_argument(
-        'player1',
+        'playermodule1',
         metavar='PLAYER',
         type=str,
         help='first player',
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         choices=default_players,
     )
     parser.add_argument(
-        'player2',
+        'playermodule2',
         metavar='PLAYER',
         type=str,
         help='second player',

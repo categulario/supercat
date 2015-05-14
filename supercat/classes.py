@@ -12,9 +12,9 @@ class PlayerAction(argparse.Action):
         super(PlayerAction, self).__init__(option_strings, dest, **kwargs)
 
     def __call__(self, parser, namespace, values, option_string=None):
-        player = importlib.import_module('players.' + values)
+        playermodule = importlib.import_module('players.' + values)
 
-        setattr(namespace, self.dest, player.Player())
+        setattr(namespace, self.dest, playermodule)
 
 
 class BasePlayer:
