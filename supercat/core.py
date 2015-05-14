@@ -24,8 +24,8 @@ default_players = tuple(map(
 ))
 
 def main(
-        player1=None,
-        player2=None,
+        playermodule1=None,
+        playermodule2=None,
         fps=1,
         coin=False,
         capture_screen=False,
@@ -50,8 +50,8 @@ def main(
             "R": pygame.image.load('src/octo_big.png'),
         }
 
-    player1.identity = 'X'
-    player2.identity = 'O'
+    player1 = playermodule1.Player('X')
+    player2 = playermodule2.Player('O')
 
     if player1.name == player2.name:
         name = player1.name
