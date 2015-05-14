@@ -37,7 +37,7 @@ class Game:
         }
 
     def compute(self, real_game):
-        """Computes the weights of each box"""
+        """Computes the weights of each box given a game"""
         def measure_row(row):
             measure = 3
             for box in row:
