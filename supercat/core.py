@@ -30,7 +30,9 @@ def main(
         coin=False,
         capture_screen=False,
         no_render=False,
-        wait=0):
+        wait=0,
+        tournament=False,
+    ):
     render = not no_render
     if PYGAME_MODULE and render:
         pygame.init()
@@ -112,7 +114,8 @@ def main(
             err("%a attempted to play an already played box!"%player_name)
             break
 
-        csv(player_name.rjust(10, ' '), *(game+pos))
+        if not tournament:
+            csv(player_name.rjust(10, ' '), *(game+pos))
 
         # Set the world to the new status
         world[game][pos] = pieces[turn]
