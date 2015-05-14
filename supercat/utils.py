@@ -9,7 +9,10 @@ err = partial(print, file=sys.stderr)
 csv = partial(print, sep=', ')
 
 def boxes():
-    return ((row, col) for row in range(3) for col in range(3))
+    return tuple((row, col) for row in range(3) for col in range(3))
+
+def corners():
+    return tuple((row, col) for row in (0, 2) for col in (0, 2))
 
 def shuffle(iterable):
     items = list(iterable)[:]
