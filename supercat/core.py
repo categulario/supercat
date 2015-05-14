@@ -73,6 +73,7 @@ def main(
     move = 1
     game_should_play = None
     winner = 'R'
+    last_move = None, None
 
     if coin and random.choice([0, 1]) == 1:
         players.reverse()
@@ -93,6 +94,7 @@ def main(
             world.copy(),
             game_should_play,
             move,
+            last_move
         )
 
         # Handle surrenders
@@ -113,6 +115,8 @@ def main(
         if world[game][pos] in pieces:
             err("%a attempted to play an already played box!"%player_name)
             break
+
+        last_move = game, pos
 
         if not tournament:
             csv(player_name.rjust(15, ' '), *(game+pos))

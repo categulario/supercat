@@ -11,7 +11,7 @@ class Player(BasePlayer):
 
     name = 'ordered'
 
-    def play(self, world, game, move_num):
+    def play(self, world, game, move_num, last_move):
         # lazy game
         if game is not None:
             # should play this game
