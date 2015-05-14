@@ -119,7 +119,11 @@ def main(
         last_move = game, pos
 
         if not tournament:
-            csv(player_name.rjust(15, ' '), *(game+pos))
+            csv(
+                str(move).rjust(2, ' '),
+                player_name.rjust(15, ' '),
+                *(game+pos)
+            )
 
         # Set the world to the new status
         world[game][pos] = pieces[turn]
