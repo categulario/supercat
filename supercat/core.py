@@ -6,6 +6,7 @@ import time
 import os
 from supercat.utils import *
 from datetime import datetime
+from itertools import starmap
 
 try:
     import pygame
@@ -24,13 +25,14 @@ default_players = tuple(map(
 ))
 
 def main(
-        player1=None,
-        player2=None,
+        players=None,
         fps=1,
         coin=False,
         capture_screen=False,
         no_render=False,
-        wait=0):
+        wait=0,
+        tournament=False,
+    ):
     render = not no_render
     if PYGAME_MODULE and render:
         pygame.init()
@@ -48,8 +50,11 @@ def main(
             "R": pygame.image.load('src/octo_big.png'),
         }
 
-    player1.identity = 'X'
-    player2.identity = 'O'
+    pieces = ["X", "O", "R"]
+    player1, player2 = list(starmap(
+        lambda i, m:m.Player(pieces[i]),
+        enumerate(players)
+    ))
 
     if player1.name == player2.name:
         name = player1.name
@@ -63,7 +68,6 @@ def main(
             "O": player2.name,
         }
 
-    pieces = ["X", "O", "R"]
     players = [player1, player2]
     world = clean_world()
 
@@ -71,6 +75,7 @@ def main(
     move = 1
     game_should_play = None
     winner = 'R'
+    last_move = None, None
 
     if coin and random.choice([0, 1]) == 1:
         players.reverse()
@@ -91,6 +96,7 @@ def main(
             world.copy(),
             game_should_play,
             move,
+            last_move
         )
 
         # Handle surrenders
@@ -112,7 +118,14 @@ def main(
             err("%a attempted to play an already played box!"%player_name)
             break
 
-        csv(player_name.rjust(10, ' '), *(game+pos))
+        last_move = game, pos
+
+        if not tournament:
+            csv(
+                str(move).rjust(2, ' '),
+                player_name.rjust(15, ' '),
+                *(game+pos)
+            )
 
         # Set the world to the new status
         world[game][pos] = pieces[turn]
