@@ -23,10 +23,25 @@ class Player(BasePlayer):
             except ValueError:
                 print ('%s inválido'%thing)
 
+    def game_name(self, row, col):
+        rows = [
+            'arriba',
+            'centro',
+            'abajo',
+        ]
+        cols = [
+            'izquierda',
+            'enmedio',
+            'derecha',
+        ]
+        return rows[row] + ' ' + cols[col]
+
     def play(self, world, game, move_num, last_move):
         try:
             if game is None:
                 game = self.get_valid_coords('Juego')
+            else:
+                print('Tienes que el juego de %s'%self.game_name(*game))
 
             box  = self.get_valid_coords('Movimiento')
 

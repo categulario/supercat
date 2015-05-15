@@ -24,7 +24,7 @@ default_players = tuple(map(
     )
 ))
 
-def main(
+def referi(
         players=None,
         fps=1,
         coin=False,
@@ -180,7 +180,13 @@ def main(
             clock.tick(fps)
 
     if capture_screen and PYGAME_MODULE and render:
-        pygame.image.save(screen, "screenshot_%s.png"%datetime.now().strftime('%Y-%m-%dT%H-%M-%S'))
+        png_name = "caps/%s vs %s %s.png"%(
+            player1.name,
+            player2.name,
+            datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
+        )
+        pygame.image.save(screen, png_name)
+        print ('game finish saved to %s'%png_name)
 
     if wait and PYGAME_MODULE and render:
         time.sleep(wait)

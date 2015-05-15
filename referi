@@ -3,7 +3,7 @@
 The referi module
 """
 import argparse
-from supercat.core import main, default_players
+from supercat.core import referi, default_players
 from supercat.classes import PlayerAction
 
 if __name__ == '__main__':
@@ -58,4 +58,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    main(**vars(args))
+    referi(**vars(args))
