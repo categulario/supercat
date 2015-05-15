@@ -1,4 +1,4 @@
-from supercat.utils import random_boxes, boxes, corners
+from supercat.utils import random_boxes, boxes, corners, err
 from supercat.classes import BasePlayer
 import random
 
@@ -29,8 +29,9 @@ def possible_rows(row, col):
 
 class Game:
     """Represents a box of the game"""
-    def __init__(self, distance=3, winner_moves=[]):
-        self.distance = distance
+    def __init__(self, identity):
+        self.identity = identity
+        self.distance = 3
         self.boxes = {
             box: BOX_FIRST
             for box in boxes()
@@ -65,15 +66,20 @@ class Player(BasePlayer):
     def __init__(self, identity='X'):
         self.identity = identity
         self.mygames = {
-            game: Game()
+            game: Game(identity)
             for game in boxes()
         }
         self.oponentgames = {
-            game: Game()
+            game: Game(self.oponent())
             for game in boxes()
         }
 
     def play(self, world, game, move_num, last_move):
+        oponent_game, oponent_move = last_move
+
+        if oponent_game != None:
+            self.oponentgames[oponent_game].compute(world[oponent_game])
+
         if move_num == 1:
             return tuple([random.choice(random_boxes()) for i in range(2)])
         elif move_num < 15:
@@ -89,13 +95,18 @@ class Player(BasePlayer):
                 if self.mygames[game].distance == 3:
                     # empty (for me) world pick corners
                     corner = random.choice(tuple(filter(
-                        lambda box:world[game][box] not in ['X', 'O'],
+                        lambda box:world[game][box] != 'O',
                         corners()
                     )))
                     self.mygames[game].compute(world[game])
                     return game, corner
                 elif self.mygames[game].distance == 2:
                     pass
+                elif self.mygames[game].distance == 1:
+                    pass
+                else:
+                    err('everyone is crazy!')
+                    exit(1)
         elif move_num < 35:
             # prevent the enemy for closing games, try to make an strategy
             pass
