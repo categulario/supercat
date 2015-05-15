@@ -6,28 +6,29 @@
 
 El juego del supergato se juega así:
 
-* Gana el que gana el gato grande
-* Se gana el gato grande ganando los gatos chiquitos en alguna forma que describa un juego ganador en el tradicional gato
-* El primer jugador decide qué gato y casilla jugar
-* Cada jugador jugará el gato análogo en el gato grande a la casilla que jugó el jugador previo
+* Gana el que gana el gato grande.
+* Se gana el gato grande ganando los gatos chiquitos en alguna forma que represente un juego ganador en el tradicional gato.
+* El primer jugador decide qué gato y casilla jugar.
+* Cada jugador jugará el gato análogo en el gato grande a la casilla que jugó el jugador previo en su gato pequeño.
 * Si a un jugador le corresponde jugar un gato que ya está terminado (ganado o empate) puede elegir qué gato jugar.
 
-## Cómo usar el referi
+## API para jugadores
 
-Debes crear un módulo en python con una clase `Player` que herede de `supercat.utils.BasePlayer` y que tenga una función `play(world, game, move_num)`, dónde:
+Debes crear un módulo en python con una clase `Player` que herede de `supercat.utils.BasePlayer` y que tenga una función `play(world, game, move_num, last_move)`, dónde:
 
-* `world` es el estado actual del juego (ver `definitinos/world.py`)
+* `world` es el estado actual del juego (ver `definitinos/world.py`).
 * `game` son las coordenadas (como tupla) del juego que el jugador debe jugar
-  o `None` si es juego libre. Ejemplo: `(1, 2)`
+  o `None` si es juego libre. Ejemplo: `(1, 2)`.
 * `move_num` el número de jugada, comenzando con 1.
+* `last_move` es la última jugada `juego, casilla` del oponente, si es la primera jugada del juego esto es `None, None`.
 
-El valor de retorno de la función debe ser una 2-tupla de 2-tuplas que represente la jugada que va a jugar o `None, None` en caso de rendición, ejemplo: `(0, 0), (1, 1)`
+El valor de retorno de la función debe ser una 2-tupla de 2-tuplas que represente la jugada que va a jugar o `None, None` en caso de rendición, ejemplo: `(0, 0), (1, 1)`.
 
 Adicionalmente la clase debe definir un atributo `name` con el nombre del jugador.
 
 Se puede saber qué tipo de ficha (`X`, u `O`) se está jugando accediendo a la propiedad `self.identity` de la clase.
 
-También se puede saber qué juega el oponente llamando a la función `self.oponent()` de la clase.
+Puedes revisar (y usar) las cosas en `supercat.utils`, hay funciones ya definidas para varias cosas.
 
 ## Cómo usar el referi
 
@@ -46,11 +47,37 @@ $ python referi lucky kysxd
 
 Por defecto los juegos son a 1 cuadro por segundo
 
+### Opciones de línea de comandos
+
+```
+usage: referi [-h] [-f NUM] [-c] [-s] [-n] [-w SECONDS]
+              PLAYER1 PLAYER2 PLAYER1 PLAYER2
+
+Supercat referi
+
+positional arguments:
+  PLAYER1 PLAYER2       players to play
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -f NUM, --fps NUM     fps at with the game should play
+  -c, --coin            should the referi flip a coin?
+  -s, --capture-screen  take a screenshot of the final game
+  -n, --no-render       Do not render the pygame GUI, just compute the game
+  -w SECONDS, --wait SECONDS
+                        wait before game disapears
+
+lets play!
+```
+
 ## Changelog
 
 ### v1.1
 
-* Se crean dos funciones `csv` y `err` en `supercat.utils` para separar `stdin` y `stderr` (esto puede ser útil para replay games)
+* Se crean dos funciones `csv` y `err` en `supercat.utils` para separar `stdin` y `stderr` (esto puede ser útil para replay games).
+* Se añadè `human` a los jugadores, ahora los humanos pueden jugar (kind of)...
+* Se añade el jugador `randomdepressed` a los posibles jugadores.
+* Corrección de bugs, refactorización, muerte, destrucción y cumbia.
 
 ### v1.0
 
