@@ -24,7 +24,7 @@ default_players = tuple(map(
     )
 ))
 
-def main(
+def referi(
         players=None,
         fps=1,
         coin=False,
