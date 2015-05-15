@@ -150,7 +150,7 @@ def main(
                 for g_col in range(3):
                     if world[g_row, g_col]['owner'] in pieces:
                         # draw a big one
-                        coordinates = g_row*(105+30) + 10, g_col*(105 + 30) + 10
+                        coordinates = g_col*(105 + 30) + 10, g_row*(105+30) + 10
                         screen.blit(big_icons[world[g_row, g_col]['owner']], coordinates)
                         continue
 
@@ -158,7 +158,7 @@ def main(
                         for col in range(3):
                             if world[g_row, g_col][row, col] in pieces:
                                 # draw a small one
-                                coordinates = g_row*(105+30) + row*(25 + 15) + 10, g_col*(105 + 30) + col*(25 + 15) + 10
+                                coordinates = g_col*(105 + 30) + col*(25 + 15) + 10, g_row*(105+30) + row*(25 + 15) + 10
                                 screen.blit(icons[world[g_row, g_col][row, col]], coordinates)
 
             pygame.display.flip()
