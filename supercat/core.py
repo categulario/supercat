@@ -180,7 +180,11 @@ def main(
             clock.tick(fps)
 
     if capture_screen and PYGAME_MODULE and render:
-        pygame.image.save(screen, "screenshot_%s.png"%datetime.now().strftime('%Y-%m-%dT%H-%M-%S'))
+        pygame.image.save(screen, "caps/%s vs %s %s.png"%(
+            player1.name,
+            player2.name,
+            datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
+        ))
 
     if wait and PYGAME_MODULE and render:
         time.sleep(wait)
