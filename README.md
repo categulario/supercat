@@ -48,6 +48,10 @@ Por defecto los juegos son a 1 cuadro por segundo
 
 ## Changelog
 
+### v1.1
+
+* Se crean dos funciones `csv` y `err` en `supercat.utils` para separar `stdin` y `stderr` (esto puede ser útil para replay games)
+
 ### v1.0
 
 * Ahora los jugadores son objetos en vez de sólo funciones, revisar `players/lucky.py` para más información

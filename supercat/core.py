@@ -6,6 +6,7 @@ import time
 import os
 from supercat.utils import *
 from datetime import datetime
+from itertools import starmap
 
 try:
     import pygame
@@ -24,8 +25,7 @@ default_players = tuple(map(
 ))
 
 def main(
-        playermodule1=None,
-        playermodule2=None,
+        players=None,
         fps=1,
         coin=False,
         capture_screen=False,
@@ -50,8 +50,11 @@ def main(
             "R": pygame.image.load('src/octo_big.png'),
         }
 
-    player1 = playermodule1.Player('X')
-    player2 = playermodule2.Player('O')
+    pieces = ["X", "O", "R"]
+    player1, player2 = list(starmap(
+        lambda i, m:m.Player(pieces[i]),
+        enumerate(players)
+    ))
 
     if player1.name == player2.name:
         name = player1.name
@@ -65,7 +68,6 @@ def main(
             "O": player2.name,
         }
 
-    pieces = ["X", "O", "R"]
     players = [player1, player2]
     world = clean_world()
 
@@ -148,7 +150,7 @@ def main(
                 for g_col in range(3):
                     if world[g_row, g_col]['owner'] in pieces:
                         # draw a big one
-                        coordinates = g_row*(105+30) + 10, g_col*(105 + 30) + 10
+                        coordinates = g_col*(105 + 30) + 10, g_row*(105+30) + 10
                         screen.blit(big_icons[world[g_row, g_col]['owner']], coordinates)
                         continue
 
@@ -156,7 +158,7 @@ def main(
                         for col in range(3):
                             if world[g_row, g_col][row, col] in pieces:
                                 # draw a small one
-                                coordinates = g_row*(105+30) + row*(25 + 15) + 10, g_col*(105 + 30) + col*(25 + 15) + 10
+                                coordinates = g_col*(105 + 30) + col*(25 + 15) + 10, g_row*(105+30) + row*(25 + 15) + 10
                                 screen.blit(icons[world[g_row, g_col][row, col]], coordinates)
 
             pygame.display.flip()
