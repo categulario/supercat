@@ -6,6 +6,7 @@ import time
 import os
 from supercat.utils import *
 from datetime import datetime
+from itertools import starmap
 
 try:
     import pygame
@@ -24,8 +25,7 @@ default_players = tuple(map(
 ))
 
 def main(
-        playermodule1=None,
-        playermodule2=None,
+        players=None,
         fps=1,
         coin=False,
         capture_screen=False,
@@ -50,8 +50,11 @@ def main(
             "R": pygame.image.load('src/octo_big.png'),
         }
 
-    player1 = playermodule1.Player('X')
-    player2 = playermodule2.Player('O')
+    pieces = ["X", "O", "R"]
+    player1, player2 = list(starmap(
+        lambda i, m:m.Player(pieces[i]),
+        enumerate(players)
+    ))
 
     if player1.name == player2.name:
         name = player1.name
@@ -65,7 +68,6 @@ def main(
             "O": player2.name,
         }
 
-    pieces = ["X", "O", "R"]
     players = [player1, player2]
     world = clean_world()
 
