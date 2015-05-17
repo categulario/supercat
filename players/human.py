@@ -4,6 +4,8 @@
 like the ordered one, but randomizes its search
 """
 from supercat.classes import BasePlayer
+from supercat.utils import err
+import sys
 
 class Player(BasePlayer):
 
@@ -21,7 +23,7 @@ class Player(BasePlayer):
                         raise ValueError()
                 return game
             except ValueError:
-                print ('%s inválido'%thing)
+                err('%s inválido'%thing)
 
     def game_name(self, row, col):
         rows = [
@@ -41,7 +43,7 @@ class Player(BasePlayer):
             if game is None:
                 game = self.get_valid_coords('Juego')
             else:
-                print('Tienes que el juego de %s'%self.game_name(*game))
+                err('Tienes que jugar el juego de %s'%self.game_name(*game))
 
             box  = self.get_valid_coords('Movimiento')
 
