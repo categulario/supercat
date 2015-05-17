@@ -72,6 +72,11 @@ lets play!
 
 ## Changelog
 
+### v1.2
+
+* Nuevos jugadores! `murder` le gana a ordered siempre, `meta` le gana a `murder`, `randomdrepressed` se cambió el nombre a `drunk`. `murder` y `meta` son contribuciones de @KYSXD.
+* El tablero estaba traspuesto con respecto a las coordenadas que recibían los jugadores, ya no más.
+
 ### v1.1
 
 * Se crean dos funciones `csv` y `err` en `supercat.utils` para separar `stdin` y `stderr` (esto puede ser útil para replay games).
