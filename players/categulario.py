@@ -1,13 +1,8 @@
-from supercat.utils import random_boxes, boxes, corners, err
+from supercat.utils import random_boxes, boxes, corners, err, oponent
 from supercat.classes import BasePlayer
 import random
 
-BOX_IMPOSSIBLE = -1
-BOX_USELESS    = 4
-BOX_FIRST      = 3
-BOX_STRATEGY   = 2
-BOX_WINNER     = 1
-
+INF = float('inf')
 nums = (0, 1, 2)
 
 def possible_rows(row, col):
@@ -33,7 +28,7 @@ class Game:
         self.identity = identity
         self.distance = 3
         self.boxes = {
-            box: BOX_FIRST
+            box: 3
             for box in boxes()
         }
 
@@ -42,21 +37,24 @@ class Game:
         def measure_row(row):
             measure = 3
             for box in row:
-                if real_game[box] == self.oponent():
+                if real_game[box] == oponent(self.identity):
                     return 4 # found enemy
                 elif real_game[box] == self.identity:
                     measure -= 1
             return measure
-        min_distance = BOX_USELESS
+        min_distance = 4
         for box in self.boxes:
             if real_game[box] in ['X', 'O']:
-                self.boxes[box] = BOX_IMPOSSIBLE
+                self.boxes[box] = INF
             else:
                 distance = min(map(measure_row, possible_rows(*box)))
                 if distance < min_distance:
                     min_distance = distance
                 self.boxes[box] = distance
         self.distance = min_distance
+
+    def __getitem__(self, box):
+        return self.boxes[box]
 
 
 class Player(BasePlayer):
@@ -70,48 +68,35 @@ class Player(BasePlayer):
             for game in boxes()
         }
         self.oponentgames = {
-            game: Game(self.oponent())
+            game: Game(oponent(self.identity))
             for game in boxes()
         }
+
+    def best_play(self, game):
+        if game is not None:
+            move = None
+            wsum = float('inf')
+            for box in random_boxes():
+                if self.mygames[game][box] == INF:
+                    continue
+                wsum_temp = self.mygames[game][box] + self.oponentgames[game][box]
+                if wsum_temp < wsum:
+                    wsum = wsum_temp
+                    move = box
+            return game, box
+        else:
+            pass
 
     def play(self, world, game, move_num, last_move):
         oponent_game, oponent_move = last_move
 
         if oponent_game != None:
             self.oponentgames[oponent_game].compute(world[oponent_game])
+        if game != None:
+            self.mygames[game].compute(world[game])
 
         if move_num == 1:
             return tuple([random.choice(random_boxes()) for i in range(2)])
-        elif move_num < 15:
-            # if free move, try to win games
-            # get closer to win games
-            # send the oponent to not convenient games
-            # for instance never send the oponent to free moves
-            # if sent to empty world, pick the best corner
-            # final move of a game should not be a free play
-            if game is None:
-                pass
-            else:
-                if self.mygames[game].distance == 3:
-                    # empty (for me) world pick corners
-                    corner = random.choice(tuple(filter(
-                        lambda box:world[game][box] != 'O',
-                        corners()
-                    )))
-                    self.mygames[game].compute(world[game])
-                    return game, corner
-                elif self.mygames[game].distance == 2:
-                    pass
-                elif self.mygames[game].distance == 1:
-                    pass
-                else:
-                    err('everyone is crazy!')
-                    exit(1)
-        elif move_num < 35:
-            # prevent the enemy for closing games, try to make an strategy
-            pass
         else:
-            # Keep an eye on a winner game
-            pass
-
+            return self.best_play(game)
         return None, None
