@@ -83,9 +83,9 @@ class Player(BasePlayer):
                 if wsum_temp < wsum:
                     wsum = wsum_temp
                     move = box
-            return game, box
+            return game, move
         else:
-            pass
+            err('Ayuda!!')
 
     def play(self, world, game, move_num, last_move):
         oponent_game, oponent_move = last_move
@@ -98,5 +98,6 @@ class Player(BasePlayer):
         if move_num == 1:
             return tuple([random.choice(random_boxes()) for i in range(2)])
         else:
-            return self.best_play(game)
+            play = self.best_play(game)
+            return play
         return None, None
