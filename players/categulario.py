@@ -63,11 +63,11 @@ class Player(BasePlayer):
 
     def __init__(self, identity='X'):
         self.identity = identity
-        self.mygames = {
+        self.my_boxes = {
             game: Game(identity)
             for game in boxes()
         }
-        self.oponentgames = {
+        self.oponent_boxes = {
             game: Game(oponent(self.identity))
             for game in boxes()
         }
@@ -77,9 +77,9 @@ class Player(BasePlayer):
             move = None
             wsum = float('inf')
             for box in random_boxes():
-                if self.mygames[game][box] == INF:
+                if self.my_boxes[game][box] == INF:
                     continue
-                wsum_temp = self.mygames[game][box] + self.oponentgames[game][box]
+                wsum_temp = self.my_boxes[game][box] + self.oponent_boxes[game][box]
                 if wsum_temp < wsum:
                     wsum = wsum_temp
                     move = box
@@ -91,9 +91,9 @@ class Player(BasePlayer):
         oponent_game, oponent_move = last_move
 
         if oponent_game != None:
-            self.oponentgames[oponent_game].compute(world[oponent_game])
+            self.oponent_boxes[oponent_game].compute(world[oponent_game])
         if game != None:
-            self.mygames[game].compute(world[game])
+            self.my_boxes[game].compute(world[game])
 
         if move_num == 1:
             return tuple([random.choice(random_boxes()) for i in range(2)])
