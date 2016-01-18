@@ -8,6 +8,9 @@ import sys
 err = partial(print, file=sys.stderr)
 csv = partial(print, sep=', ')
 
+def oponent(self, identity):
+    return chr(-1*ord(identity) + 167)
+
 def boxes():
     return tuple((row, col) for row in range(3) for col in range(3))
 
