@@ -24,9 +24,6 @@ class BasePlayer:
     def __init__(self, identity='X'):
         self.identity = identity
 
-    def oponent(self):
-        return chr(-1*ord(self.identity) + 167)
-
     def __str__(self):
         return self.name
 
