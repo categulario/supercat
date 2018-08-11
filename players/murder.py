@@ -1,11 +1,12 @@
 """
 # Ordered Player
 
-The ordered player, plays the first available move from top to bottom, from left
-to right
+The ordered player, plays the first available move from top to bottom,
+from left to right
 """
 from supercat.classes import BasePlayer
 from supercat.utils import boxes
+
 
 class Player(BasePlayer):
 
@@ -16,7 +17,7 @@ class Player(BasePlayer):
         if game is not None:
             # should play this game
             for row, col in boxes():
-                if world[game][2-row, col] == None:
+                if world[game][2-row, col] is None:
                     return game, (2-row, col)
         else:
             # free play!
@@ -25,6 +26,6 @@ class Player(BasePlayer):
                     continue
 
                 for row, col in boxes():
-                    if world[grand_row, grand_col][2-row, col] == None:
+                    if world[grand_row, grand_col][2-row, col] is None:
                         return (grand_row, grand_col), (2-row, col)
         return None, None
