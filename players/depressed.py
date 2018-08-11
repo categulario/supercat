@@ -3,7 +3,7 @@
 
 He just gives up
 """
-from supercat.classes import BasePlayer
+
 
 class Player:
 
