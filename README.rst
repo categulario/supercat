@@ -1,8 +1,10 @@
-# supercat
+Supergato
+=========
 
 ![El juego de gato, a otro nivel](https://github.com/developingo/supercat/blob/master/src/game.png)
 
-## Reglas
+Reglas
+------
 
 El juego del supergato se juega así:
 
@@ -12,7 +14,8 @@ El juego del supergato se juega así:
 * Cada jugador jugará el gato análogo en el gato grande a la casilla que jugó el jugador previo en su gato pequeño.
 * Si a un jugador le corresponde jugar un gato que ya está terminado (ganado o empate) puede elegir qué gato jugar.
 
-## API para jugadores
+API para jugadores
+------------------
 
 Debes crear un módulo en python con una clase `Player` que herede de `supercat.utils.BasePlayer` y que tenga una función `play(world, game, move_num, last_move)`, dónde:
 
@@ -30,7 +33,8 @@ Se puede saber qué tipo de ficha (`X`, u `O`) se está jugando accediendo a la 
 
 Puedes revisar (y usar) las cosas en `supercat.utils`, hay funciones ya definidas para varias cosas.
 
-## Cómo usar el referi
+Cómo usar el referi
+-------------------
 
 Habiendo instalado pygame (ver [Cómo instalar pygame](https://www.youtube.com/watch?v=ZJ2XvYMr6tY)) usar al referi es muy sencillo. Abre una consola y navega hasta el repositorio, luego:
 
@@ -47,7 +51,9 @@ $ python referi lucky kysxd
 
 Por defecto los juegos son a 1 cuadro por segundo
 
-### Opciones de línea de comandos
+Opciones de línea de comandos
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 ```
 usage: referi [-h] [-f NUM] [-c] [-s] [-n] [-w SECONDS]
@@ -70,31 +76,37 @@ optional arguments:
 lets play!
 ```
 
-## Changelog
+Changelog
+---------
 
-### v1.2
+v1.2
+~~~~
 
 * Nuevos jugadores! `murder` le gana a ordered siempre, `meta` le gana a `murder`, `randomdrepressed` se cambió el nombre a `drunk`. `murder` y `meta` son contribuciones de @KYSXD.
 * El tablero estaba traspuesto con respecto a las coordenadas que recibían los jugadores, ya no más.
 
-### v1.1
+v1.1
+~~~~
 
 * Se crean dos funciones `csv` y `err` en `supercat.utils` para separar `stdin` y `stderr` (esto puede ser útil para replay games).
 * Se añadè `human` a los jugadores, ahora los humanos pueden jugar (kind of)...
 * Se añade el jugador `randomdepressed` a los posibles jugadores.
 * Corrección de bugs, refactorización, muerte, destrucción y cumbia.
 
-### v1.0
+v1.0
+~~~~
 
 * Ahora los jugadores son objetos en vez de sólo funciones, revisar `players/lucky.py` para más información
 * Correcciones menores de bugs
 
-### v0.3
+v0.3
+~~~~
 
 * Se añade el módulo `supercat.utils` que todos los jugadores pueden usar, con funciones útiles como `boxes`, `random_boxes` y tests sobre el estado del juego
 * Correcciones a `ordered`
 
-### v0.2
+v0.2
+~~~~
 
 * Se pueden guardar capturas de pantalla del final del juego usando la opción `-s` de la interfaz de línea de comandos
 * El primer jugador siempre juega cuadros
@@ -102,7 +114,8 @@ lets play!
 * Ya se reconocen los empates (locales y general) y se marcan en el mundo con `"R"`
 * El código de `lucky` y `ordered` está más limpio gracias a una función mágica
 
-### v0.1
+v0.1
+~~~~
 
 * Primera versión del referi, puede poner a competir dos IA y mostrar la partida
 * permite regular los frames por segundo
