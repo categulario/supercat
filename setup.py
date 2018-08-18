@@ -61,5 +61,6 @@ setup(
 
     tests_require=[
         'pytest',
+        'flake8',
     ],
 )
