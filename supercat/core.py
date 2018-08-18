@@ -52,7 +52,7 @@ def referi_func(
 
     pieces = ["X", "O", "R"]
     player1, player2 = list(starmap(
-        lambda i, m: m.Player(pieces[i]),
+        lambda i, p: p(pieces[i]),
         enumerate(players)
     ))
 
