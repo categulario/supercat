@@ -3,10 +3,11 @@
 The referi module
 """
 import argparse
-from supercat.core import referi, default_players
+from supercat.core import referi_func
 from supercat.classes import PlayerAction
 
-if __name__ == '__main__':
+
+def referi():
     parser = argparse.ArgumentParser(
         prog="referi",
         description='Supercat referi',
@@ -14,6 +15,7 @@ if __name__ == '__main__':
         lets play!
         """
     )
+
     parser.add_argument(
         'players',
         metavar='PLAYER1 PLAYER2',
@@ -21,7 +23,6 @@ if __name__ == '__main__':
         type=str,
         help='players to play',
         action=PlayerAction,
-        choices=default_players,
     )
     parser.add_argument(
         '-f', '--fps',
@@ -58,4 +59,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    referi(**vars(args))
+    referi_func(**vars(args))
