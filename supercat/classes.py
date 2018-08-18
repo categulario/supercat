@@ -26,12 +26,3 @@ class BasePlayer:
 
     def __str__(self):
         return self.name
-
-if __name__ == '__main__':
-    p1 = BasePlayer('X')
-    assert p1.identity == 'X'
-    assert p1.oponent() == 'O'
-
-    p2 = BasePlayer('O')
-    assert p2.identity == 'O'
-    assert p2.oponent() == 'X'
