@@ -4,22 +4,25 @@ core functions
 import random
 import time
 import os
-from supercat.utils import *
+from supercat.utils import clean_world, is_owned, \
+                           won_game, is_dead_world, \
+                           is_dead_heat, csv, err
 from datetime import datetime
 from itertools import starmap
 
 try:
     import pygame
-    from pygame.locals import *
+    from pygame.locals import KEYDOWN, QUIT
     PYGAME_MODULE = True
 except ImportError:
-    print ('pygame module not available')
+    print('pygame module not available')
     PYGAME_MODULE = False
 
 ASSET_DIR = os.path.abspath(os.path.join(
     os.path.dirname(__file__),
     'assets'
 ))
+
 
 def referi_func(
         players=None,
@@ -28,8 +31,7 @@ def referi_func(
         capture_screen=False,
         no_render=False,
         wait=0,
-        tournament=False,
-    ):
+        tournament=False,):
     render = not no_render
 
     if PYGAME_MODULE and render:
@@ -50,7 +52,7 @@ def referi_func(
 
     pieces = ["X", "O", "R"]
     player1, player2 = list(starmap(
-        lambda i, m:m.Player(pieces[i]),
+        lambda i, m: m.Player(pieces[i]),
         enumerate(players)
     ))
 
@@ -101,21 +103,21 @@ def referi_func(
 
         # Handle surrenders
         if game is None:
-            err("%s surrenders!"%player_name)
+            err("%s surrenders!" % player_name)
             break
 
         # Player made an invalid move
         if game_should_play is not None and game_should_play != game:
-            err("%s did not play the game he should!"%player_name)
+            err("%s did not play the game he should!" % player_name)
             break
 
         if world[game]['owner'] in pieces:
-            err("%s attempted to play in a closed game!"%player_name)
+            err("%s attempted to play in a closed game!" % player_name)
             break
 
         # Not available boxes
         if world[game][pos] in pieces:
-            err("%a attempted to play an already played box!"%player_name)
+            err("%a attempted to play an already played box!" % player_name)
             break
 
         last_move = game, pos
@@ -132,11 +134,11 @@ def referi_func(
 
         if is_owned(world[game]):
             world[game]['owner'] = pieces[turn]
-            err("%s owned game %s"%(player_name, game))
+            err("%s owned game %s" % (player_name, game))
 
         if is_dead_heat(world[game]):
             world[game]['owner'] = 'R'
-            err("%s killed the heat %s"%(player_name, game))
+            err("%s killed the heat %s" % (player_name, game))
 
         game_should_play = pos if world[pos]['owner'] is None else None
 
@@ -150,21 +152,30 @@ def referi_func(
                 for g_col in range(3):
                     if world[g_row, g_col]['owner'] in pieces:
                         # draw a big one
-                        coordinates = g_col*(105 + 30) + 10, g_row*(105+30) + 10
-                        screen.blit(big_icons[world[g_row, g_col]['owner']], coordinates)
+                        coordinates = g_col*(105 + 30) + 10, \
+                            g_row*(105+30) + 10
+                        screen.blit(
+                            big_icons[world[g_row, g_col]['owner']],
+                            coordinates)
                         continue
 
                     for row in range(3):
                         for col in range(3):
                             if world[g_row, g_col][row, col] in pieces:
                                 # draw a small one
-                                coordinates = g_col*(105 + 30) + col*(25 + 15) + 10, g_row*(105+30) + row*(25 + 15) + 10
-                                screen.blit(icons[world[g_row, g_col][row, col]], coordinates)
+                                coordinates = \
+                                    g_col*(105 + 30) + \
+                                    col*(25 + 15) + 10, \
+                                    g_row*(105+30) + \
+                                    row*(25 + 15) + 10
+                                screen.blit(
+                                    icons[world[g_row, g_col][row, col]],
+                                    coordinates)
 
             pygame.display.flip()
 
         if won_game(world):
-            err("%s wins!"%player_name)
+            err("%s wins!" % player_name)
             winner = player_name
             break
 
@@ -180,13 +191,13 @@ def referi_func(
             clock.tick(fps)
 
     if capture_screen and PYGAME_MODULE and render:
-        png_name = "caps/%s vs %s %s.png"%(
+        png_name = "caps/%s vs %s %s.png" % (
             player1.name,
             player2.name,
             datetime.now().strftime('%Y-%m-%dT%H-%M-%S')
         )
         pygame.image.save(screen, png_name)
-        print ('game finish saved to %s'%png_name)
+        print('game finish saved to %s' % png_name)
 
     if wait and PYGAME_MODULE and render:
         time.sleep(wait)

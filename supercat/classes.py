@@ -4,6 +4,7 @@ Utility classes
 import argparse
 from importlib import import_module
 
+
 class PlayerAction(argparse.Action):
     """Return a module"""
     def __init__(self, option_strings, dest, **kwargs):
