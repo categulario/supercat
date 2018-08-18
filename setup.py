@@ -42,7 +42,7 @@ setup(
     ],
 
     package_data={
-        'supercat': ['assets/*.png'],
+        'supercat': ['assets/*.png', 'version.txt'],
     },
 
     entry_points={
