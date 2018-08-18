@@ -1,7 +1,8 @@
 Supergato
 =========
 
-![El juego de gato, a otro nivel](https://github.com/developingo/supercat/blob/master/src/game.png)
+.. image:: https://github.com/developingo/supercat/blob/master/src/game.png
+   :alt: El juego de gato a otro nivel
 
 Reglas
 ------
