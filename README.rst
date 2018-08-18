@@ -39,16 +39,16 @@ Cómo usar el referi
 
 Habiendo instalado pygame (ver [Cómo instalar pygame](https://www.youtube.com/watch?v=ZJ2XvYMr6tY)) usar al referi es muy sencillo. Abre una consola y navega hasta el repositorio, luego:
 
-```bash
-$ python referi --help # Un poco de ayuda
-$ python referi lucky ordered -f 3 # Corre el referi, lucky contra depressed a 3 cuadros por segundo
-```
+.. code-block:: bash
+
+   $ python referi --help # Un poco de ayuda
+   $ python referi lucky ordered -f 3 # Corre el referi, lucky contra depressed a 3 cuadros por segundo
 
 El referi puede jugar con jugadores presentes en la carpeta `players`, se pueden repetir jugadores también, los nombres de los jugadores son el nombre del archivo sin la extensión, de modo que si tengo un jugador llamado `kysxd.py` en la carpeta players puedo jugarlo con:
 
-```bash
-$ python referi lucky kysxd
-```
+.. code-block:: bash
+
+   $ python referi lucky kysxd
 
 Por defecto los juegos son a 1 cuadro por segundo
 
@@ -56,26 +56,26 @@ Opciones de línea de comandos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-```
-usage: referi [-h] [-f NUM] [-c] [-s] [-n] [-w SECONDS]
-              PLAYER1 PLAYER2 PLAYER1 PLAYER2
+.. code-block:: bash
 
-Supercat referi
+   usage: referi [-h] [-f NUM] [-c] [-s] [-n] [-w SECONDS]
+                 PLAYER1 PLAYER2 PLAYER1 PLAYER2
 
-positional arguments:
-  PLAYER1 PLAYER2       players to play
+   Supercat referi
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -f NUM, --fps NUM     fps at with the game should play
-  -c, --coin            should the referi flip a coin?
-  -s, --capture-screen  take a screenshot of the final game
-  -n, --no-render       Do not render the pygame GUI, just compute the game
-  -w SECONDS, --wait SECONDS
-                        wait before game disapears
+   positional arguments:
+     PLAYER1 PLAYER2       players to play
 
-lets play!
-```
+   optional arguments:
+     -h, --help            show this help message and exit
+     -f NUM, --fps NUM     fps at with the game should play
+     -c, --coin            should the referi flip a coin?
+     -s, --capture-screen  take a screenshot of the final game
+     -n, --no-render       Do not render the pygame GUI, just compute the game
+     -w SECONDS, --wait SECONDS
+                           wait before game disapears
+
+   lets play!
 
 Changelog
 ---------
