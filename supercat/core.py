@@ -31,6 +31,7 @@ def referi_func(
         tournament=False,
     ):
     render = not no_render
+
     if PYGAME_MODULE and render:
         pygame.init()
         screen = pygame.display.set_mode((395, 395))

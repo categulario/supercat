@@ -2,7 +2,7 @@
 Utility classes
 """
 import argparse
-import importlib
+from importlib import import_module
 
 class PlayerAction(argparse.Action):
     """Return a module"""
@@ -11,7 +11,7 @@ class PlayerAction(argparse.Action):
 
     def __call__(self, parser, namespace, values, option_string=None):
         setattr(namespace, self.dest, list(map(
-            lambda p:importlib.import_module('players.' + p),
+            lambda p: import_module('supercat.players.' + p),
             values
         )))
 
