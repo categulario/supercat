@@ -23,6 +23,7 @@ ASSET_DIR = os.path.abspath(os.path.join(
     'assets'
 ))
 
+
 def referi_func(
         players=None,
         fps=1,
