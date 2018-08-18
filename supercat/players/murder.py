@@ -10,7 +10,7 @@ from supercat.utils import boxes
 
 class Player(BasePlayer):
 
-    name = 'anti_ordered'
+    name = 'murder'
 
     def play(self, world, game, move_num, last_move):
         # lazy game

@@ -18,37 +18,37 @@ El juego del supergato se juega así:
 API para jugadores
 ------------------
 
-Debes crear un módulo en python con una clase `Player` que herede de `supercat.utils.BasePlayer` y que tenga una función `play(world, game, move_num, last_move)`, dónde:
+Debes crear un archivo python con una clase ``Player`` que herede de ``supercat.classes.BasePlayer`` y que tenga una función ``play(world, game, move_num, last_move)``, donde:
 
-* `world` es el estado actual del juego (ver `definitinos/world.py`).
-* `game` son las coordenadas (como tupla) del juego que el jugador debe jugar
-  o `None` si es juego libre. Ejemplo: `(1, 2)`.
-* `move_num` el número de jugada, comenzando con 1.
-* `last_move` es la última jugada `juego, casilla` del oponente, si es la primera jugada del juego esto es `None, None`.
+* ``world`` es el estado actual del juego (ver ``definitinos/world.py``).
+* ``game`` son las coordenadas (como tupla) del juego que el jugador debe jugar
+  o ``None`` si es juego libre. Ejemplo: ``(1, 2)``.
+* ``move_num`` el número de jugada, comenzando con 1.
+* ``last_move`` es la última jugada ``juego, casilla`` del oponente, si es la primera jugada del juego esto es ``None, None``.
 
-El valor de retorno de la función debe ser una 2-tupla de 2-tuplas que represente la jugada que va a jugar o `None, None` en caso de rendición, ejemplo: `(0, 0), (1, 1)`.
+El valor de retorno de la función debe ser una 2-tupla de 2-tuplas que represente la jugada que va a jugar o ``None, None`` en caso de rendición, ejemplo: ``(0, 0), (1, 1)``.
 
-Adicionalmente la clase debe definir un atributo `name` con el nombre del jugador.
+Adicionalmente la clase debe definir un atributo ``name`` con el nombre del jugador.
 
-Se puede saber qué tipo de ficha (`X`, u `O`) se está jugando accediendo a la propiedad `self.identity` de la clase.
+Se puede saber qué tipo de ficha (``X``, u ``O``) se está jugando accediendo a la propiedad ``self.identity`` de la clase.
 
-Puedes revisar (y usar) las cosas en `supercat.utils`, hay funciones ya definidas para varias cosas.
+Puedes revisar (y usar) las cosas en ``supercat.utils``, hay funciones ya definidas para varias cosas.
 
 Cómo usar el referi
 -------------------
 
-Habiendo instalado pygame (ver [Cómo instalar pygame](https://www.youtube.com/watch?v=ZJ2XvYMr6tY)) usar al referi es muy sencillo. Abre una consola y navega hasta el repositorio, luego:
+Instala el paquete ``supercat`` (``pip install supercat``). Habiendo hecho eso el referi está disponible como un ejecutable:
 
 .. code-block:: bash
 
-   $ python referi --help # Un poco de ayuda
-   $ python referi lucky ordered -f 3 # Corre el referi, lucky contra depressed a 3 cuadros por segundo
+   $ referi --help # Un poco de ayuda
+   $ referi lucky ordered -f 3 # Corre el referi, lucky contra depressed a 3 cuadros por segundo
 
-El referi puede jugar con jugadores presentes en la carpeta `players`, se pueden repetir jugadores también, los nombres de los jugadores son el nombre del archivo sin la extensión, de modo que si tengo un jugador llamado `kysxd.py` en la carpeta players puedo jugarlo con:
+El referi puede jugar con los jugadores por defecto (contenidos en la carpeta players o correr jugadores contenidos en archivos de texto. Suponiendo que declaraste tu jugador en un archivo llamado ``kysxd.py`` puedes probarlo contra un jugador por defecto usando:
 
 .. code-block:: bash
 
-   $ python referi lucky kysxd
+   $ referi lucky kysxd.py
 
 Por defecto los juegos son a 1 cuadro por segundo
 
@@ -83,37 +83,37 @@ Changelog
 v1.2
 ~~~~
 
-* Nuevos jugadores! `murder` le gana a ordered siempre, `meta` le gana a `murder`, `randomdrepressed` se cambió el nombre a `drunk`. `murder` y `meta` son contribuciones de @KYSXD.
+* Nuevos jugadores! ``murder`` le gana a ordered siempre, ``meta`` le gana a ``murder``, ``randomdrepressed`` se cambió el nombre a ``drunk``. ``murder`` y ``meta`` son contribuciones de @KYSXD.
 * El tablero estaba traspuesto con respecto a las coordenadas que recibían los jugadores, ya no más.
 
 v1.1
 ~~~~
 
-* Se crean dos funciones `csv` y `err` en `supercat.utils` para separar `stdin` y `stderr` (esto puede ser útil para replay games).
-* Se añadè `human` a los jugadores, ahora los humanos pueden jugar (kind of)...
-* Se añade el jugador `randomdepressed` a los posibles jugadores.
+* Se crean dos funciones ``csv`` y ``err`` en ``supercat.utils`` para separar ``stdin`` y ``stderr`` (esto puede ser útil para replay games).
+* Se añadè ``human`` a los jugadores, ahora los humanos pueden jugar (kind of)...
+* Se añade el jugador ``randomdepressed`` a los posibles jugadores.
 * Corrección de bugs, refactorización, muerte, destrucción y cumbia.
 
 v1.0
 ~~~~
 
-* Ahora los jugadores son objetos en vez de sólo funciones, revisar `players/lucky.py` para más información
+* Ahora los jugadores son objetos en vez de sólo funciones, revisar ``players/lucky.py`` para más información
 * Correcciones menores de bugs
 
 v0.3
 ~~~~
 
-* Se añade el módulo `supercat.utils` que todos los jugadores pueden usar, con funciones útiles como `boxes`, `random_boxes` y tests sobre el estado del juego
-* Correcciones a `ordered`
+* Se añade el módulo ``supercat.utils`` que todos los jugadores pueden usar, con funciones útiles como ``boxes``, ``random_boxes`` y tests sobre el estado del juego
+* Correcciones a ``ordered``
 
 v0.2
 ~~~~
 
-* Se pueden guardar capturas de pantalla del final del juego usando la opción `-s` de la interfaz de línea de comandos
+* Se pueden guardar capturas de pantalla del final del juego usando la opción ``-s`` de la interfaz de línea de comandos
 * El primer jugador siempre juega cuadros
-* Para que el referi tire una moneda y decida quién tira primero se usa la opción `-c` (aun así el primer jugador juega cuadros)
-* Ya se reconocen los empates (locales y general) y se marcan en el mundo con `"R"`
-* El código de `lucky` y `ordered` está más limpio gracias a una función mágica
+* Para que el referi tire una moneda y decida quién tira primero se usa la opción ``-c`` (aun así el primer jugador juega cuadros)
+* Ya se reconocen los empates (locales y general) y se marcan en el mundo con ``"R"``
+* El código de ``lucky`` y ``ordered`` está más limpio gracias a una función mágica
 
 v0.1
 ~~~~

@@ -10,7 +10,7 @@ from supercat.utils import random_boxes
 
 class Player(BasePlayer):
 
-    name = 'randomdepressed'
+    name = 'drunk'
 
     def play(self, world, game, move_num, last_move):
         if random.random() < (move_num/81)**4:
