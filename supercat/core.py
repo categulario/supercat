@@ -18,16 +18,12 @@ except ImportError:
     print('pygame module not available')
     PYGAME_MODULE = False
 
-default_players = tuple(map(
-    lambda x: x.split('.')[0],
-    filter(
-        lambda x: x.endswith('.py'),
-        os.listdir('players')
-    )
+ASSET_DIR = os.path.abspath(os.path.join(
+    os.path.dirname(__file__),
+    'assets'
 ))
 
-
-def referi(
+def referi_func(
         players=None,
         fps=1,
         coin=False,
@@ -36,20 +32,21 @@ def referi(
         wait=0,
         tournament=False,):
     render = not no_render
+
     if PYGAME_MODULE and render:
         pygame.init()
         screen = pygame.display.set_mode((395, 395))
         pygame.display.set_caption('Supercat referi')
         clock = pygame.time.Clock()
-        board = pygame.image.load('src/board.png')
+        board = pygame.image.load(os.path.join(ASSET_DIR, 'board.png'))
         icons = {
-            "X": pygame.image.load('src/square.png'),
-            "O": pygame.image.load('src/circle.png'),
+            "X": pygame.image.load(os.path.join(ASSET_DIR, 'square.png')),
+            "O": pygame.image.load(os.path.join(ASSET_DIR, 'circle.png')),
         }
         big_icons = {
-            "X": pygame.image.load('src/square_big.png'),
-            "O": pygame.image.load('src/circle_big.png'),
-            "R": pygame.image.load('src/octo_big.png'),
+            "X": pygame.image.load(os.path.join(ASSET_DIR, 'square_big.png')),
+            "O": pygame.image.load(os.path.join(ASSET_DIR, 'circle_big.png')),
+            "R": pygame.image.load(os.path.join(ASSET_DIR, 'octo_big.png')),
         }
 
     pieces = ["X", "O", "R"]
@@ -85,6 +82,7 @@ def referi(
 
     while True:
         player_name = assigns[pieces[turn]]
+
         if PYGAME_MODULE and render:
             for event in pygame.event.get():
                 if event.type == KEYDOWN and event.key == 27:
@@ -93,6 +91,7 @@ def referi(
                 elif event.type == QUIT:
                     # Handles window close button
                     return
+
         # Make the player play
         game, pos = players[turn].play(
             world.copy(),

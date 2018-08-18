@@ -2,7 +2,7 @@
 Utility classes
 """
 import argparse
-import importlib
+from importlib import import_module
 
 
 class PlayerAction(argparse.Action):
@@ -12,7 +12,7 @@ class PlayerAction(argparse.Action):
 
     def __call__(self, parser, namespace, values, option_string=None):
         setattr(namespace, self.dest, list(map(
-            lambda p: importlib.import_module('players.' + p),
+            lambda p: import_module('supercat.players.' + p),
             values
         )))
 
@@ -27,13 +27,3 @@ class BasePlayer:
 
     def __str__(self):
         return self.name
-
-
-if __name__ == '__main__':
-    p1 = BasePlayer('X')
-    assert p1.identity == 'X'
-    assert p1.oponent() == 'O'
-
-    p2 = BasePlayer('O')
-    assert p2.identity == 'O'
-    assert p2.oponent() == 'X'
