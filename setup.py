@@ -59,8 +59,10 @@ setup(
         'pytest-runner',
     ],
 
-    tests_require=[
-        'pytest',
-        'flake8',
-    ],
+    extras_require={
+        'test': [
+            'pytest',
+            'flake8',
+        ]
+    },
 )
